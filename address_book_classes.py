@@ -1,4 +1,5 @@
 import pickle
+import re
 from collections import UserDict
 from datetime import datetime
 
@@ -9,6 +10,10 @@ class BirthdayError(Exception):
 
 
 class PhoneError(Exception):
+    pass
+
+
+class EmailError(Exception):
     pass
 
 
@@ -24,6 +29,8 @@ def error_keeper(function):
                 print(f'This phone number is too {pe.args[0]}!')
             else:
                 print('That is incorrect phone number!')
+        except EmailError:
+            print('That is incorrect email!')
         except ValueError:
             print('Something is wrong!\nGo to README.md to check the correctness\n')
         except AttributeError:
@@ -43,6 +50,7 @@ class Field:
             self.__value = None
             self.value = phone
         if email:
+            self.__value = None
             self.value = email
         if birthday:
             self.__value = None
@@ -95,7 +103,20 @@ class Phone(Field):
 
 
 class Email(Field):
-    pass
+    @property
+    def value(self):
+        if self.__value:
+            return self.__value
+
+    @value.setter
+    @error_keeper
+    def value(self, value):
+        pattern = r"[A-Za-z]{1}[A-Za-z0-9._]{1,}@[A-Za-z]+\.[A-Za-z]{2,}"
+        if re.match(pattern, value):
+            self.__value = value
+        else:
+            self.__value = None
+            raise EmailError
 
 
 class Name(Field):
@@ -143,6 +164,8 @@ class Record:
                         self.phones.remove(ph)
                         print(f'Phone number {some_phone.value} has been successfully changed to {different_phone.value}\n')
                         flag = True
+            else:
+                flag = True
         except AttributeError:
             flag == False
         if flag == False:
@@ -176,14 +199,17 @@ class Record:
         print(f'Email {extra_email.value} has been successfully added!\n')
 
     def change_email(self, some_email, different_email):
-        flag = False
         try:
-            for em in self.emails:
-                if em.value == some_email.value:
-                    self.emails.remove(em)
-                    self.emails.append(different_email)
-                    print(f'Email {some_email.value} has been successfully changed to {different_email.value}\n')
-                    flag = True
+            flag = False
+            if different_email.value != None:
+                for em in self.emails:
+                    if em.value == some_email.value:
+                        self.emails.remove(em)
+                        self.emails.append(different_email)
+                        print(f'Email {some_email.value} has been successfully changed to {different_email.value}\n')
+                        flag = True
+            else:
+                flag = True
         except AttributeError:
             flag == False
 
