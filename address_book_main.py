@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from address_book_classes import Birthday, Phone, Email, Name, Record, AddressBook, error_keeper 
 
 
@@ -131,7 +132,53 @@ def delete_field(inp_split_lst, type):
         name = ' '.join(inp_split_lst[1:inp_split_lst.index('birthday')])
         del_bd = ' '.join(inp_split_lst[inp_split_lst.index('birthday')+1:])
         ab[name].delete_birthday(Birthday(birthday=del_bd))
+
+
+def birthday_within_time(inp_split_lst):
+    type = inp_split_lst[-1]
+    amount = int(inp_split_lst[1])
     
+    if type == 'days':
+        if 0 < amount < 365:
+            days = amount
+        else:
+            print('Incorrect number of days!\n')
+            return None
+    elif type == 'weeks':
+        if 0 < amount <= 52:
+            days = amount*7
+        else:
+            print('Incorrect number of weeks!\n')
+            return None
+    elif type == 'months':
+        if 0 < amount < 12:
+            now = datetime.now()
+            if now.month + amount <= 12:
+                last_date = datetime(year=now.year, month=now.month + amount, day=now.day)
+                days = (last_date - now).days + 1
+            else:
+                last_date = datetime(year=now.year+1, month=(now.month+amount-12), day=now.day)
+                days = (last_date - now).days + 1
+        else:
+            print('Incorrect number of months\n')
+            return None
+    else:
+        print('Incorrect type of time interval!\n')
+        return None
+    
+    result = ''
+
+    for rec in ab.data.values():
+        if rec.birthday != None:
+            if rec.days_to_birthday() <= days:
+                result += str(rec)
+    
+    if len(result) > 0:
+        print(result)
+    else:
+        print('No one found within this interval\n')
+
+
 def find_func(inp_split_lst):
     inp = ' '.join(inp_split_lst[1:]).strip()
     ab.find_contact(inp)
@@ -144,7 +191,7 @@ def address_book_main_func():
 
         ask = input('>>> ')
         inp_split_lst = ask.split(' ')
-        commands = ['add_contact', 'delete_contact', 'add_number', 'change_number', 'delete_number', 'add_email', 'change_email', 'delete_email', 'add_birthday', 'change_birthday', 'delete_birthday', 'find', 'show', 'show_all', 'close', 'exit']
+        commands = ['add_contact', 'delete_contact', 'add_number', 'change_number', 'delete_number', 'add_email', 'change_email', 'delete_email', 'add_birthday', 'change_birthday', 'delete_birthday', 'birthday_within', 'find', 'show', 'show_all', 'close', 'exit']
         command = inp_split_lst[0].lower()
         
         if command == 'hello':
@@ -188,6 +235,9 @@ def address_book_main_func():
 
         elif command == 'delete_birthday':
             delete_field(inp_split_lst, 'birthday')
+        
+        elif command == 'birthday_within':
+            birthday_within_time(inp_split_lst)
 
         elif command == 'find':
             find_func(inp_split_lst)
