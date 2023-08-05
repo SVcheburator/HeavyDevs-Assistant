@@ -173,7 +173,7 @@ def delete_field(inp_split_lst, type):
     elif type == 'address':
         name = ' '.join(inp_split_lst[1:inp_split_lst.index('address')])
         del_adr = ' '.join(inp_split_lst[inp_split_lst.index('address')+1:])
-        ab[name].delete_address(Address(birthday=del_adr))
+        ab[name].delete_address(Address(address=del_adr))
 
 
 def birthday_within_time(inp_split_lst):
