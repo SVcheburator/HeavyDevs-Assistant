@@ -43,7 +43,7 @@ def error_keeper(function):
 
 # Classes
 class Field:
-    def __init__(self, name=None, phone=None, email=None, birthday=None):
+    def __init__(self, name=None, phone=None, email=None, birthday=None, address = None):
         if name:
             self.value = name
         if phone:
@@ -55,7 +55,9 @@ class Field:
         if birthday:
             self.__value = None
             self.value = birthday
-
+        if address:
+            self.__value = None
+            self.value = address
 
 class Birthday(Field):
     @property
@@ -122,11 +124,16 @@ class Email(Field):
 class Name(Field):
     pass
 
+#Додаємо новий клас для адрес
+class Address(Field):
+    pass
 
 class Record:
     def __init__(self, person_name, phone_num=None, email=None, birthday=None, ab=None):
         self.ab = ab
         self.name = person_name
+        self.address = None  # Поле для адреси
+
         if phone_num:
             self.phones = []
             self.phones.append(phone_num)
@@ -229,6 +236,24 @@ class Record:
 
         if flag == False:
                 print(f'There is no such email as {some_email.value}\n')
+
+    #Adress operations
+    def add_address(self):
+    if not self.address:
+        self.address = Address()
+    self.address.input_address()
+    print("Address added successfully!")
+
+    def change_address(self):
+        if self.address:
+            self.address.input_address()
+            print("Address modified successfully!")
+        else:
+            print("No address available.")
+
+    def delete_address(self):
+        self.address = None
+        print("Address deleted.")
 
     # Birthday operations
     def days_to_birthday(self):
