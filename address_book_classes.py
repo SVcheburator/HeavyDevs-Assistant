@@ -56,7 +56,6 @@ class Field:
             self.__value = None
             self.value = birthday
         if address:
-            self.__value = None
             self.value = address
 
 class Birthday(Field):
@@ -129,11 +128,10 @@ class Address(Field):
     pass
 
 class Record:
-    def __init__(self, person_name, phone_num=None, email=None, birthday=None, ab=None):
+    def __init__(self, person_name, phone_num=None, email=None, birthday=None, address=None, ab=None):
         self.ab = ab
         self.name = person_name
-        self.address = None  # Поле для адреси
-
+        
         if phone_num:
             self.phones = []
             self.phones.append(phone_num)
@@ -144,6 +142,9 @@ class Record:
         
         if birthday:
             self.birthday = birthday
+        
+        if address:
+            self.address = address
     
     # Phone operations
     def add_phone(self, extra_phone, flag=True):
@@ -238,22 +239,34 @@ class Record:
                 print(f'There is no such email as {some_email.value}\n')
 
     #Adress operations
-    def add_address(self):
-    if not self.address:
-        self.address = Address()
-    self.address.input_address()
-    print("Address added successfully!")
+    def add_address(self, new_address):
+            self.address = new_address
+            print(f'Address {new_address} has been successfully added!\n')
 
-    def change_address(self):
-        if self.address:
-            self.address.input_address()
-            print("Address modified successfully!")
-        else:
-            print("No address available.")
+    # def change_address(self, new_address):
+    #     if self.address:
+    #         self.address = new_address
+    #         print(f'Address has been successfully changed to {new_address}\n')
+    #     else:
+    #         print("No address available.")
+
+    def change_address(self, old_adr, new_adr):
+        flag = False
+        try:
+            if self.address.value == old_adr.value:
+                self.address = new_adr
+                print(f'Address {old_adr.value} has been successfully changed to {new_adr.value}\n')
+                flag = True
+        
+        if flag == False:
+            print(f'There is no such address as {old_adr.value}\n')
 
     def delete_address(self):
-        self.address = None
-        print("Address deleted.")
+        if self.address:
+            self.address = None
+            print("Address deleted.")
+        else:
+            print(f'There is no address to delete.\n')
 
     # Birthday operations
     def days_to_birthday(self):
