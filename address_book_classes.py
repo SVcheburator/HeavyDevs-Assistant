@@ -268,7 +268,7 @@ class Record:
             flag == False
         
         if flag == False:
-            print(f'There is no such address as {some_adr.value.}\n')
+            print(f'There is no such address as {some_adr.value}\n')
 
 
     # Birthday operations
