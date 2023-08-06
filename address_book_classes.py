@@ -243,13 +243,7 @@ class Record:
             self.address = new_address
             print(f'Address {new_address} has been successfully added!\n')
 
-    # def change_address(self, new_address):
-    #     if self.address:
-    #         self.address = new_address
-    #         print(f'Address has been successfully changed to {new_address}\n')
-    #     else:
-    #         print("No address available.")
-
+   
     def change_address(self, old_adr, new_adr):
         flag = False
         try:
@@ -257,16 +251,25 @@ class Record:
                 self.address = new_adr
                 print(f'Address {old_adr.value} has been successfully changed to {new_adr.value}\n')
                 flag = True
+        except AttributeError:
+            flag == False
         
         if flag == False:
             print(f'There is no such address as {old_adr.value}\n')
 
-    def delete_address(self):
-        if self.address:
-            self.address = None
-            print("Address deleted.")
-        else:
-            print(f'There is no address to delete.\n')
+    def delete_address(self, some_adr):
+        flag = False
+        try:
+            if self.address.value == some_adr.value:
+                self.address = None
+                flag = True
+                print(f'Address {some_adr.value.} has been successfully deleted\n')
+        except AttributeError:
+            flag == False
+        
+        if flag == False:
+            print(f'There is no such address as {some_adr.value.}\n')
+
 
     # Birthday operations
     def days_to_birthday(self):
