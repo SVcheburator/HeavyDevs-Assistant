@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from address_book_classes import Birthday, Phone, Email, Name, Record, Address, AddressBook, error_keeper 
 
 
@@ -45,10 +45,13 @@ def add_contact(inp_split_lst):
         input_address = None
     else:
         input_address = True
+
     input_name = ' '.join(inp_split_lst[1:])
+
     if input_address:
         input_name = ' '.join(inp_split_lst[1:inp_split_lst.index('address')])
         input_address = ' '.join(inp_split_lst[inp_split_lst.index('address')+1:])
+
     if input_birthday:
         input_name = ' '.join(inp_split_lst[1:inp_split_lst.index('birthday')])
         input_birthday = ' '.join(inp_split_lst[inp_split_lst.index('birthday')+1:])
@@ -64,6 +67,7 @@ def add_contact(inp_split_lst):
             input_email = ' '.join(inp_split_lst[inp_split_lst.index('email')+1:inp_split_lst.index('birthday')])
         except ValueError:
             pass
+
     if input_email:
         input_name = ' '.join(inp_split_lst[1:inp_split_lst.index('email')])
         input_email = ' '.join(inp_split_lst[inp_split_lst.index('email')+1:])
@@ -75,6 +79,7 @@ def add_contact(inp_split_lst):
             input_email = ' '.join(inp_split_lst[inp_split_lst.index('email')+1:inp_split_lst.index('birthday')])
         except ValueError:
             pass
+
     if input_phone:
         input_name = ' '.join(inp_split_lst[1:inp_split_lst.index('phone')])
         input_phone = ' '.join(inp_split_lst[inp_split_lst.index('phone')+1:])
@@ -90,6 +95,7 @@ def add_contact(inp_split_lst):
             input_phone = ' '.join(inp_split_lst[inp_split_lst.index('phone')+1:inp_split_lst.index('email')])
         except ValueError:
             pass
+        
     ab.add_record(Record(Name(name=input_name), Phone(phone=input_phone), Email(email=input_email), Birthday(birthday=input_birthday), Address(address = input_address), ab=ab))
 
 # Field operations
