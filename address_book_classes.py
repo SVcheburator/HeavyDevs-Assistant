@@ -238,10 +238,10 @@ class Record:
         if flag == False:
                 print(f'There is no such email as {some_email.value}\n')
 
-    #Adress operations
+    #Address operations
     def add_address(self, new_address):
             self.address = new_address
-            print(f'Address {new_address} has been successfully added!\n')
+            print(f'Address {new_address.value} has been successfully added!\n')
 
    
     def change_address(self, old_adr, new_adr):
@@ -263,7 +263,7 @@ class Record:
             if self.address.value == some_adr.value:
                 self.address = None
                 flag = True
-                print(f'Address {some_adr.value.} has been successfully deleted\n')
+                print(f'Address {some_adr.value} has been successfully deleted\n')
         except AttributeError:
             flag == False
         
