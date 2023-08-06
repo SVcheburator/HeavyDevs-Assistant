@@ -43,7 +43,7 @@ def error_keeper(function):
 
 # Classes
 class Field:
-    def __init__(self, name=None, phone=None, email=None, birthday=None):
+    def __init__(self, name=None, phone=None, email=None, birthday=None, address = None):
         if name:
             self.value = name
         if phone:
@@ -55,7 +55,8 @@ class Field:
         if birthday:
             self.__value = None
             self.value = birthday
-
+        if address:
+            self.value = address
 
 class Birthday(Field):
     @property
@@ -122,11 +123,15 @@ class Email(Field):
 class Name(Field):
     pass
 
+#Додаємо новий клас для адрес
+class Address(Field):
+    pass
 
 class Record:
-    def __init__(self, person_name, phone_num=None, email=None, birthday=None, ab=None):
+    def __init__(self, person_name, phone_num=None, email=None, birthday=None, address=None, ab=None):
         self.ab = ab
         self.name = person_name
+        
         if phone_num:
             self.phones = []
             self.phones.append(phone_num)
@@ -137,6 +142,9 @@ class Record:
         
         if birthday:
             self.birthday = birthday
+        
+        if address:
+            self.address = address
     
     # Phone operations
     def add_phone(self, extra_phone, flag=True):
@@ -229,6 +237,39 @@ class Record:
 
         if flag == False:
                 print(f'There is no such email as {some_email.value}\n')
+
+    #Address operations
+    def add_address(self, new_address):
+            self.address = new_address
+            print(f'Address {new_address.value} has been successfully added!\n')
+
+   
+    def change_address(self, old_adr, new_adr):
+        flag = False
+        try:
+            if self.address.value == old_adr.value:
+                self.address = new_adr
+                print(f'Address {old_adr.value} has been successfully changed to {new_adr.value}\n')
+                flag = True
+        except AttributeError:
+            flag == False
+        
+        if flag == False:
+            print(f'There is no such address as {old_adr.value}\n')
+
+    def delete_address(self, some_adr):
+        flag = False
+        try:
+            if self.address.value == some_adr.value:
+                self.address = None
+                flag = True
+                print(f'Address {some_adr.value} has been successfully deleted\n')
+        except AttributeError:
+            flag == False
+        
+        if flag == False:
+            print(f'There is no such address as {some_adr.value}\n')
+
 
     # Birthday operations
     def days_to_birthday(self):

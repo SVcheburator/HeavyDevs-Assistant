@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from address_book_classes import Birthday, Phone, Email, Name, Record, AddressBook, error_keeper 
+from address_book_classes import Birthday, Phone, Email, Name, Record, Address, AddressBook, error_keeper 
 
 
 ab = AddressBook()
@@ -41,10 +41,21 @@ def add_contact(inp_split_lst):
         input_birthday = None
     else:
         input_birthday= True
-
+    if 'address' not in inp_split_lst:
+        input_address = None
+    else:
+        input_address = True
     input_name = ' '.join(inp_split_lst[1:])
+    if input_address:
+        input_name = ' '.join(inp_split_lst[1:inp_split_lst.index('address')])
+        input_address = ' '.join(inp_split_lst[inp_split_lst.index('address')+1:])
     if input_birthday:
         input_name = ' '.join(inp_split_lst[1:inp_split_lst.index('birthday')])
+        input_birthday = ' '.join(inp_split_lst[inp_split_lst.index('birthday')+1:])
+        try:
+            input_birthday = ' '.join(inp_split_lst[inp_split_lst.index('birthday')+1:inp_split_lst.index('address')])
+        except ValueError:
+            pass
         try:
             input_phone = ' '.join(inp_split_lst[inp_split_lst.index('phone')+1:inp_split_lst.index('birthday')])
         except ValueError:
@@ -53,19 +64,24 @@ def add_contact(inp_split_lst):
             input_email = ' '.join(inp_split_lst[inp_split_lst.index('email')+1:inp_split_lst.index('birthday')])
         except ValueError:
             pass
-        input_birthday = ' '.join(inp_split_lst[inp_split_lst.index('birthday')+1:])
-
     if input_email:
         input_name = ' '.join(inp_split_lst[1:inp_split_lst.index('email')])
         input_email = ' '.join(inp_split_lst[inp_split_lst.index('email')+1:])
         try:
+            input_email = ' '.join(inp_split_lst[inp_split_lst.index('email')+1:inp_split_lst.index('address')])
+        except ValueError:
+            pass
+        try:
             input_email = ' '.join(inp_split_lst[inp_split_lst.index('email')+1:inp_split_lst.index('birthday')])
         except ValueError:
             pass
-
     if input_phone:
         input_name = ' '.join(inp_split_lst[1:inp_split_lst.index('phone')])
         input_phone = ' '.join(inp_split_lst[inp_split_lst.index('phone')+1:])
+        try:
+            input_phone = ' '.join(inp_split_lst[inp_split_lst.index('phone')+1:inp_split_lst.index('address')])
+        except ValueError:
+            pass
         try:
             input_phone = ' '.join(inp_split_lst[inp_split_lst.index('phone')+1:inp_split_lst.index('birthday')])
         except ValueError:
@@ -74,9 +90,7 @@ def add_contact(inp_split_lst):
             input_phone = ' '.join(inp_split_lst[inp_split_lst.index('phone')+1:inp_split_lst.index('email')])
         except ValueError:
             pass
-
-    ab.add_record(Record(Name(name=input_name), Phone(phone=input_phone), Email(email=input_email), Birthday(birthday=input_birthday), ab=ab))
-
+    ab.add_record(Record(Name(name=input_name), Phone(phone=input_phone), Email(email=input_email), Birthday(birthday=input_birthday), Address(address = input_address), ab=ab))
 
 # Field operations
 @error_keeper
@@ -95,6 +109,11 @@ def add_field(inp_split_lst, type):
         name = ' '.join(inp_split_lst[1:inp_split_lst.index('birthday')])
         add_bd = ' '.join(inp_split_lst[inp_split_lst.index('birthday')+1:])
         ab[name].add_birthday(Birthday(birthday=add_bd))
+
+    elif type == 'address':
+        name = ' '.join(inp_split_lst[1:inp_split_lst.index('address')])
+        add_adr = ' '.join(inp_split_lst[inp_split_lst.index('address')+1:])
+        ab[name].add_address(Address(address=add_adr))
 
 @error_keeper
 def change_field(inp_split_lst, type):
@@ -116,6 +135,13 @@ def change_field(inp_split_lst, type):
         change_bd_to = ' '.join(inp_split_lst[inp_split_lst.index('to')+1:])
         ab[name].change_birthday(Birthday(birthday=change_bd_from), Birthday(birthday=change_bd_to))
 
+    elif type == 'address':
+        name = ' '.join(inp_split_lst[1:inp_split_lst.index('address')])
+        change_adr_from = ' '.join(inp_split_lst[inp_split_lst.index('address')+1:inp_split_lst.index('to')])
+        change_adr_to = ' '.join(inp_split_lst[inp_split_lst.index('to')+1:])
+        ab[name].change_address(Address(address=change_adr_from), Address(address=change_adr_to))
+
+
 @error_keeper
 def delete_field(inp_split_lst, type):
     if type == 'number':
@@ -132,6 +158,11 @@ def delete_field(inp_split_lst, type):
         name = ' '.join(inp_split_lst[1:inp_split_lst.index('birthday')])
         del_bd = ' '.join(inp_split_lst[inp_split_lst.index('birthday')+1:])
         ab[name].delete_birthday(Birthday(birthday=del_bd))
+
+    elif type == 'address':
+        name = ' '.join(inp_split_lst[1:inp_split_lst.index('address')])
+        del_adr = ' '.join(inp_split_lst[inp_split_lst.index('address')+1:])
+        ab[name].delete_address(Address(address=del_adr))
 
 
 def birthday_within_time(inp_split_lst):
@@ -191,7 +222,7 @@ def address_book_main_func():
 
         ask = input('>>> ')
         inp_split_lst = ask.split(' ')
-        commands = ['add_contact', 'delete_contact', 'add_number', 'change_number', 'delete_number', 'add_email', 'change_email', 'delete_email', 'add_birthday', 'change_birthday', 'delete_birthday', 'birthday_within', 'find', 'show', 'show_all', 'close', 'exit']
+        commands = ['add_contact', 'delete_contact', 'add_number', 'change_number', 'delete_number', 'add_email', 'change_email', 'delete_email', 'add_birthday', 'change_birthday', 'delete_birthday', 'birthday_within', "add_address", "change_address", "delete_address", 'find', 'show', 'show_all', 'close', 'exit']
         command = inp_split_lst[0].lower()
         
         if command == 'hello':
@@ -238,6 +269,15 @@ def address_book_main_func():
         
         elif command == 'birthday_within':
             birthday_within_time(inp_split_lst)
+
+        elif command == 'add_address':
+            add_field(inp_split_lst, 'address')
+        
+        elif command == 'change_address':
+            change_field(inp_split_lst, 'address')
+
+        elif command == 'delete_address':
+            delete_field(inp_split_lst, 'address')
 
         elif command == 'find':
             find_func(inp_split_lst)
