@@ -53,13 +53,14 @@ def sort_data(path, defined_files):
             subpath.mkdir()
             for i in defined_files[key]:
                 founded_ids = []
-                for file in subpath.glob("**/*"):
-                    if i.name.casefold() == file.name.casefold():
-                        founded_ids.append(1)
-                    if file.stem.casefold().startswith(i.stem.casefold()):
-                        suffix_string = file.stem.casefold().replace(i.stem.casefold(), "")
-                        if re.fullmatch(" \(\d+\)", suffix_string[suffix_string.rfind(" "):]):
-                            founded_ids.append(int(suffix_string[2:-1]))
+                for file in subpath.iterdir():
+                    if file.is_file():
+                        if i.name.casefold() == file.name.casefold():
+                            founded_ids.append(1)
+                        if file.stem.casefold().startswith(i.stem.casefold()):
+                            suffix_string = file.stem.casefold().replace(i.stem.casefold(), "")
+                            if re.fullmatch(" \(\d+\)", suffix_string[suffix_string.rfind(" "):]):
+                                founded_ids.append(int(suffix_string[2:-1]))
                 if founded_ids:
                     id = 1
                     while True:
