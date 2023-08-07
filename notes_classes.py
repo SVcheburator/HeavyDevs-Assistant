@@ -1,6 +1,5 @@
 from collections import UserDict
 from datetime import datetime
-import pathlib
 import pickle
 
 
