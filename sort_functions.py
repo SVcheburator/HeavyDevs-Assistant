@@ -37,6 +37,7 @@ def print_data(defined_files):
             continue
         print("\n")
 
+
 def rm_empty_dirs(path):
     for i in path.iterdir():
         if i.is_dir():
@@ -45,6 +46,7 @@ def rm_empty_dirs(path):
                 i.rmdir()
             except OSError:
                 continue
+
 
 def sort_data(path, defined_files):
     for key in defined_files:
