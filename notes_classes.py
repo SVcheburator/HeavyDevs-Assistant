@@ -44,9 +44,11 @@ class Note():
 
     def mark_done(self):
         self.flag_done = True
+        self.date_modified = datetime.now()
 
     def unmark_done(self):
         self.flag_done = False
+        self.date_modified = datetime.now()
 
     def __str__(self):
         result = ""
@@ -96,5 +98,5 @@ class Notes(UserDict):
                 yield id, note
         else:
             for id, note in self.data.items():
-                if text in note.title or text in note.body:
+                if text.casefold() in note.title.casefold() or text.casefold() in note.body.casefold():
                     yield id, note
