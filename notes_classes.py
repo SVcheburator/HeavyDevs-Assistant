@@ -28,13 +28,13 @@ class Note():
     def add_tags(self, *tags):
         if tags:
             for tag in tags:
-                self.tags.add(tag)
+                self.tags.add(str(tag))
             self.date_modified = datetime.now()
 
     def remove_tags(self, *tags):
         if tags:
             for tag in tags:
-                self.tags.discard(tag)
+                self.tags.discard(str(tag))
             self.date_modified = datetime.now()
 
     def remove_all_tags(self):
@@ -54,12 +54,21 @@ class Note():
         result = ""
         result += f"Title:\n{self.title}\n"
         result += f"Body:\n{self.body}\n"
-        result += f"Tags: {' '.join(self.tags)}\n"
+        if self.tags:
+            result += f"Tags: {' '.join(self.tags)}\n"
         result += f"Date created: {self.date_created.strftime(DATETIME_FORMAT)}\n"
         result += f"Date modified: {self.date_modified.strftime(DATETIME_FORMAT)}\n"
         result += f"Is done: {self.flag_done}"
         return result
-    
+
+
+class Tag:
+    def __init__(self, tag):
+        self.tag = tag.lower()
+
+    def __str__(self):
+        return f"#{self.tag}"
+
 
 class Notes(UserDict):
     def add_note(self, note: Note):
@@ -95,8 +104,33 @@ class Notes(UserDict):
         """
         if not text:
             for id, note in self.data.items():
-                yield id, note
+                yield f"id: {id}\n{note}"
         else:
             for id, note in self.data.items():
                 if text.casefold() in note.title.casefold() or text.casefold() in note.body.casefold():
-                    yield id, note
+                    yield f"id: {id}\n{note}"
+
+    # Виконує пошук за тегами та показує сортований список нотаток.
+    def search_and_sort_by_tags(self, *tags):
+        result_search_and_sort_body = []
+        result_note = []
+        search_tags = []
+        for tag in tags:
+            search_tags.append(f"#{tag.lower()}")
+        for note in self.data.values():
+            tags_in_note = []
+            note_tags = []
+            for tag_note in note.tags:
+                note_tags.append(tag_note)
+            for tag_search in search_tags:
+                if tag_search in note_tags:
+                    tags_in_note.append(tag_search)
+            if tags_in_note == search_tags:     # Нотатки я сортував по вмісту їхнього body.
+                result_search_and_sort_body.append(note.body)
+                result_note.append(note)
+        result_search_and_sort_body.sort(key=len)
+        for index, body in enumerate(result_search_and_sort_body):
+            for note in result_note:
+                if note.body == body:
+                    result_search_and_sort_body[index] = note
+        return result_search_and_sort_body
