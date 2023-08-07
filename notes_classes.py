@@ -95,8 +95,8 @@ class Notes(UserDict):
             self.data[id] = note
 
     def remove_note(self, id):
-        if self.data.get(id):
-            self.data.pop(id)
+        if self.data.get(int(id)):
+            self.data.pop(int(id))
 
     def show_notes(self, text=None):
         """
@@ -111,7 +111,7 @@ class Notes(UserDict):
                     yield f"id: {id}\n{note}"
 
     # Виконує пошук за тегами та показує сортований список нотаток.
-    def search_and_sort_by_tags(self, *tags):
+    def search_and_sort_by_tags(self, tags):
         result_search_and_sort_body = []
         result_note = []
         search_tags = []
