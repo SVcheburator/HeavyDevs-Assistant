@@ -1,5 +1,7 @@
 from collections import UserDict
 from datetime import datetime
+import pathlib
+import pickle
 
 
 DATE_FORMAT = "%d.%m.%Y"
@@ -134,3 +136,14 @@ class Notes(UserDict):
                 if note.body == body:
                     result_search_and_sort_body[index] = note
         return result_search_and_sort_body
+    
+    def load_from_file(self, file):
+        try:
+            with open(file, "rb") as fh:
+                self.data = pickle.load(fh)
+        except:
+            return "The file with saved notes not found, corrupted or empty."
+        
+    def save_to_file(self, file):
+        with open(file, "wb") as fh:
+            pickle.dump(self.data, fh)

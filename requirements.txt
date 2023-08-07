@@ -1,0 +1,5 @@
+Package      Version
+------------ -------
+pip          23.1.2
+platformdirs 3.10.0
+setuptools   65.5.0

@@ -12,11 +12,13 @@ CATEGORY_EXTS = {
 
 def define_data(path):
     defined_files = {}
+    category_dirs = []
     for key in CATEGORY_EXTS:
         defined_files[key] = []
+        category_dirs.append(path.joinpath(key))
 
     for i in path.glob("**/*"):
-        if i.is_file():
+        if i.is_file() and i.parent not in category_dirs:
             for key in defined_files:
                 if i.suffix.removeprefix(".").casefold() in CATEGORY_EXTS[key]:
                     defined_files[key].append(i)
