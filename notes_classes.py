@@ -105,11 +105,11 @@ class Notes(UserDict):
         """
         if not text:
             for id, note in self.data.items():
-                yield f"id: {id}\n{note}"
+                yield f"ID: {id:08}\n{note}\n"
         else:
             for id, note in self.data.items():
                 if text.casefold() in note.title.casefold() or text.casefold() in note.body.casefold():
-                    yield f"id: {id}\n{note}"
+                    yield f"ID: {id:.08}\n{note}\n"
 
     # Виконує пошук за тегами та показує сортований список нотаток.
     def search_and_sort_by_tags(self, *tags):
