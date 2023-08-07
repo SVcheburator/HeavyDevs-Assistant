@@ -56,6 +56,7 @@ class Field:
             self.__value = None
             self.value = birthday
         if address:
+            self.__value = None
             self.value = address
 
 
@@ -126,7 +127,36 @@ class Name(Field):
 
 
 class Address(Field):
-    pass
+    @property
+    def value(self):
+        if self.__value:
+            return self.__value
+
+    @value.setter
+    def value(self, value):
+        address_split_lst = value.split(' ')
+        if 'street' in address_split_lst:
+            street = ' '.join(address_split_lst[address_split_lst.index('street')+1:])
+            if 'building' in address_split_lst:
+                street = ' '.join(address_split_lst[address_split_lst.index('street')+1:address_split_lst.index('building')])
+                building = ' '.join(address_split_lst[address_split_lst.index('building')+1:])
+                if 'apartment' in address_split_lst:
+                    building = ' '.join(address_split_lst[address_split_lst.index('building')+1:address_split_lst.index('apartment')])
+                    apartment = ' '.join(address_split_lst[address_split_lst.index('apartment')+1:])
+        
+        try:
+            self.__value = ''
+            self.__value += 'Street: ' + street
+            try:
+                self.__value += '\nBuilding: ' + building
+                try:
+                    self.__value += '\nApartment: ' + apartment
+                except UnboundLocalError:
+                    pass
+            except UnboundLocalError:
+                pass
+        except UnboundLocalError:
+            pass
 
 
 class Record:
@@ -281,8 +311,8 @@ class Record:
     
     #Address operations
     def add_address(self, new_address):
-            self.address = new_address
-            print(f'Address {new_address.value} has been successfully added!\n')
+        self.address = new_address
+        print(f'Address \n{new_address.value} \nhas been successfully added!\n')
 
    
     def change_address(self, old_adr, new_adr):
@@ -290,13 +320,13 @@ class Record:
         try:
             if self.address.value == old_adr.value:
                 self.address = new_adr
-                print(f'Address {old_adr.value} has been successfully changed to {new_adr.value}\n')
+                print(f'Address \n{old_adr.value} \nhas been successfully changed to \n{new_adr.value}\n')
                 flag = True
         except AttributeError:
             flag == False
         
         if flag == False:
-            print(f'There is no such address as {old_adr.value}\n')
+            print(f'There is no such address as \n{old_adr.value}\n')
 
     def delete_address(self, some_adr):
         flag = False
@@ -304,12 +334,12 @@ class Record:
             if self.address.value == some_adr.value:
                 self.address = None
                 flag = True
-                print(f'Address {some_adr.value} has been successfully deleted\n')
+                print(f'Address \n{some_adr.value} \nhas been successfully deleted\n')
         except AttributeError:
             flag == False
         
         if flag == False:
-            print(f'There is no such address as {some_adr.value}\n')
+            print(f'There is no such address as \n{some_adr.value}\n')
 
     def __str__(self):
         result = f'\nName: {self.name.value}\n'
@@ -334,9 +364,10 @@ class Record:
             pass
 
         try:
-            result += f'Address: {self.address.value}\n'
+            if self.address.value != None:
+                result += f'{self.address.value}\n'
         except AttributeError:
-            pass
+            pass 
 
         return result
 

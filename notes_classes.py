@@ -44,15 +44,18 @@ class Note():
 
     def mark_done(self):
         self.flag_done = True
+        self.date_modified = datetime.now()
 
     def unmark_done(self):
         self.flag_done = False
+        self.date_modified = datetime.now()
 
     def __str__(self):
         result = ""
         result += f"Title:\n{self.title}\n"
         result += f"Body:\n{self.body}\n"
-        result += f"Tags: {' '.join(self.tags)}\n"
+        if self.tags:
+            result += f"Tags: {' '.join(self.tags)}\n"
         result += f"Date created: {self.date_created.strftime(DATETIME_FORMAT)}\n"
         result += f"Date modified: {self.date_modified.strftime(DATETIME_FORMAT)}\n"
         result += f"Is done: {self.flag_done}"
@@ -101,11 +104,11 @@ class Notes(UserDict):
         """
         if not text:
             for id, note in self.data.items():
-                yield id, note
+                yield f"id: {id}\n{note}"
         else:
             for id, note in self.data.items():
-                if text in note.title or text in note.body:
-                    yield id, note
+                if text.casefold() in note.title.casefold() or text.casefold() in note.body.casefold():
+                    yield f"id: {id}\n{note}"
 
     # Виконує пошук за тегами та показує сортований список нотаток.
     def search_and_sort_by_tags(self, *tags):
