@@ -1,5 +1,4 @@
 import re
-from notes_classes import Note, Notes, Tag
 import os
 import pathlib
 from platformdirs import user_data_dir
@@ -242,24 +241,24 @@ def get_handler(handler):
         return "\nThis function is not exists. Try again!\n"
 
 
-def notes_main_func():
-    while True:
+# def notes_main_func():
+#     while True:
 
-        user_input = input(">>> ")
+#         user_input = input(">>> ")
 
-        if user_input.lower() == "exit":
-            print("\nGood Bye!\n")
-            break
+#         if user_input.lower() == "exit":
+#             print("\nGood Bye!\n")
+#             break
 
-        list_user_input = user_input.split()
-        list_user_input[0] = list_user_input[0].lower()
+#         list_user_input = user_input.split()
+#         list_user_input[0] = list_user_input[0].lower()
 
-        result_handler = get_handler(list_user_input[0])
+#         result_handler = get_handler(list_user_input[0])
 
-        if type(result_handler) == str:
-            print(result_handler)
-        else:
-            print(result_handler(user_input))
+#         if type(result_handler) == str:
+#             print(result_handler)
+#         else:
+#             print(result_handler(user_input))
 
 
 def get_file_path(file_name):
@@ -272,30 +271,32 @@ def get_file_path(file_name):
     return file_path
 
 
-def notes_func():
-    notes = Notes()
+def notes_main_func():
+    global notes
     file_path = get_file_path("notes.bin")
     notes.load_from_file(file_path)
 
-    # Temporary testing code for notes:
-    # Begin
-    print("\n" * 10)
-    print("Loaded notes:")
-    print("-" * 100)
-    for note in notes.show_notes():
-        print(note)
-    print("-" * 100)
-    test_note1 = Note("Test Note 1", "reirweitweiruwehrweurhweurhwje", Tag(
-        "tag1"), Tag("tag2"), Tag("tag2"), Tag("tag3"))
-    test_note2 = Note("Test Note 2", "573463463425325235", Tag(
-        "tag4"), Tag("tag4"), Tag("tag4"), Tag("tag5"))
-    notes.add_note(test_note1)
-    notes.add_note(test_note2)
+    while True:
 
-    # Dumping to file
-    notes.save_to_file(file_path)
+        notes.save_to_file(file_path)
+        user_input = input(">>> ")
 
-    print("\n" * 10)
+        if user_input.lower() == "exit":
+            print("\nGood Bye!\n")
+            break
+
+        if user_input:
+            list_user_input = user_input.split()
+            list_user_input[0] = list_user_input[0].lower()
+
+            result_handler = get_handler(list_user_input[0])
+
+            if type(result_handler) == str:
+                print(result_handler)
+            else:
+                print(result_handler(user_input))
+
+    print("\n" * 3)
     print("Saved notes:")
     print("-" * 100)
     for note in notes.show_notes():
@@ -305,5 +306,4 @@ def notes_func():
 
 
 if __name__ == "__main__":
-    notes_func()
     notes_main_func()
