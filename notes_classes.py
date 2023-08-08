@@ -29,13 +29,13 @@ class Note():
     def add_tags(self, *tags):
         if tags:
             for tag in tags:
-                self.tags.add(str(tag))
+                self.tags.add(tag)
             self.date_modified = datetime.now()
 
     def remove_tags(self, *tags):
         if tags:
             for tag in tags:
-                self.tags.discard(str(tag))
+                self.tags.discard(tag)
             self.date_modified = datetime.now()
 
     def remove_all_tags(self):
@@ -56,7 +56,7 @@ class Note():
         result += f"Title:\n{self.title}\n"
         result += f"Body:\n{self.body}\n"
         if self.tags:
-            result += f"Tags: {' '.join(self.tags)}\n"
+            result += f"Tags: {' '.join(map(str, self.tags))}\n"
         result += f"Date created: {self.date_created.strftime(DATETIME_FORMAT)}\n"
         result += f"Date modified: {self.date_modified.strftime(DATETIME_FORMAT)}\n"
         result += f"Is done: {self.flag_done}"
