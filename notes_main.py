@@ -241,26 +241,6 @@ def get_handler(handler):
         return "\nThis function is not exists. Try again!\n"
 
 
-# def notes_main_func():
-#     while True:
-
-#         user_input = input(">>> ")
-
-#         if user_input.lower() == "exit":
-#             print("\nGood Bye!\n")
-#             break
-
-#         list_user_input = user_input.split()
-#         list_user_input[0] = list_user_input[0].lower()
-
-#         result_handler = get_handler(list_user_input[0])
-
-#         if type(result_handler) == str:
-#             print(result_handler)
-#         else:
-#             print(result_handler(user_input))
-
-
 def get_file_path(file_name):
     path = pathlib.Path(user_data_dir("Personal assistant"))
     if os.name == "nt":
