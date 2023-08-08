@@ -1,6 +1,6 @@
 from address_book_main import address_book_main_func, ab
 from notes_main import notes_main_func
-from sort_main import sort_main_fucn
+from sort_main import sort_main_func
 
 
 def main_func():
@@ -24,7 +24,7 @@ def main_func():
         elif input_split_list[0] == 'sorting_files':
             arg = input_split_list[1]
             print(arg)
-            sort_main_fucn(arg)
+            sort_main_func(arg)
         
         elif choose_program_inp in ['close', 'exit']:
             print('\nGood bye!')
