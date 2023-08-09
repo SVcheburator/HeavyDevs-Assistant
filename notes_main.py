@@ -26,7 +26,7 @@ def show_commands_note(user_input):
     if user_input.strip().lower() == "show_commands_note":
         return "\n" + "\n".join(all_commands) + "\n"
     else:
-        return "\nThis function is not exists. Try again!\n"
+        return "\nThis function does not exist. Try again!\n"
 
 
 def add_note(user_input):
@@ -108,7 +108,7 @@ def remove_note(user_input):
 
 def remove_all_notes(user_input):
     if user_input.lower() != "remove_all_notes":
-        return "\nThis function is not exists. Try again!\n"
+        return "\nThis function does not exist. Try again!\n"
 
     for note_id in notes.data.keys():
         notes.remove_note(int(note_id))
@@ -128,7 +128,7 @@ def show_notes(user_input):
         else:
             return "\nYour notes list is empty!\n"
     else:
-        return "\nThis function is not exists. Try again!\n"
+        return "\nThis function does not exist. Try again!\n"
 
 
 def search_note(user_input):
@@ -145,7 +145,7 @@ def search_note(user_input):
     if result_note:
         return "\n" + "\n--------------------\n".join(result_note) + "\n"
     else:
-        return "\nYoy have no notes with this content!\n"
+        return "\nYou don't have any notes with this content!\n"
 
 
 def search_by_tags(user_input):
@@ -162,7 +162,7 @@ def search_by_tags(user_input):
     if result_note:
         return "\n" + "\n--------------------\n".join(result_note) + "\n"
     else:
-        return "\nNo notes were found for your tags!\n"
+        return "\nNo notes were found by your tags!\n"
 
 
 @input_error
@@ -191,7 +191,7 @@ def add_tags_to_note(user_input):
     else:
         return "\nTo add tags you need to write 'id: ... tags: ...'\n"
 
-    return "\nTags was succesfully added!\n"
+    return "\nTags were succesfully added!\n"
 
 
 @input_error
@@ -215,20 +215,20 @@ def remove_tags_in_note(user_input):
             try:
                 int(user_split_by_id[1])
                 note.remove_all_tags()
-                return "\nTags was succesfully removed!\n"
+                return "\nTags were succesfully removed!\n"
             except ValueError:
-                return "\nThis function is not exists. Try again!\n"
+                return "\nThis function does not exist. Try again!\n"
 
         note_tags = user_split_by_tags[1].strip()
         note_tags = note_tags.split(", ")
 
     except IndexError:
-        return "\nTo remove tags you need to write 'id: ... tags: ...'. To remove all tags you need to write 'id: ...'\n"
+        return "\nTo remove tags you need to write 'id: ... tags: ...'.\nTo remove all tags you need to write 'id: ...'\n"
 
     for tag in note_tags:
         note.remove_tags(Tag(tag))
 
-    return "\nTags was succesfully removed!\n"
+    return "\nTags were succesfully removed!\n"
 
 
 def mark_done(user_input):
@@ -246,10 +246,10 @@ def mark_done(user_input):
     try:
         if list_user_input[0].strip() == "mark_done":
             notes.data.get(note_id).mark_done()
-            return "\nMark note was done!\n"
+            return "\nNote was marked done!\n"
         else:
             notes.data.get(note_id).unmark_done()
-            return "\nUnmark note was done!\n"
+            return "\nNote was unmarked done!\n"
     except AttributeError:
         return "\nThere is no such note!\n"
 
@@ -274,7 +274,7 @@ def get_handler(handler):
     try:
         return operations_notes[handler]
     except:
-        return "\nThis function is not exists. Try again!\n"
+        return "\nThis function does not exist. Try again!\n"
 
 
 def get_file_path(file_name):
