@@ -21,8 +21,8 @@ def input_error(func):
 
 
 def show_commands_note(user_input):
-    all_commands = ["add_note", "edit_note", "remove_note", "show_notes", "search_note", "search_by_tags",
-                    "add_tags_to_note", "remove_tags_in_note", "remove_all_tags_in_note", "exit"]
+    all_commands = ["add_note", "edit_note", "remove_note", "remove_all_notes", "show_notes", "search_note", "search_by_tags",
+                    "add_tags_to_note", "remove_tags_in_note", "remove_all_tags_in_note", "mark_done", "unmark_done", "exit"]
     if user_input.strip().lower() == "show_commands_note":
         return "\n" + "\n".join(all_commands) + "\n"
     else:
@@ -243,13 +243,15 @@ def mark_done(user_input):
     except ValueError:
         return "\nid must be a number\n"
 
-    if list_user_input[0].strip() == "mark_done":
-        notes.data.get(note_id).mark_done()
-        return "\nMark note was done!\n"
-    else:
-        notes.data.get(note_id).unmark_done()
-        return "\nUnmark note was done!\n"
-
+    try:
+        if list_user_input[0].strip() == "mark_done":
+            notes.data.get(note_id).mark_done()
+            return "\nMark note was done!\n"
+        else:
+            notes.data.get(note_id).unmark_done()
+            return "\nUnmark note was done!\n"
+    except AttributeError:
+        return "\nThere is no such note!\n"
 
 operations_notes = {
     "show_commands_note": show_commands_note,
@@ -295,7 +297,7 @@ def notes_main_func():
         notes.save_to_file(file_path)
         user_input = input(">>> ")
 
-        if user_input.lower() == "exit":
+        if user_input.lower() in ['close', 'exit']:
             print("\nGood Bye!\n")
             break
 
@@ -309,15 +311,3 @@ def notes_main_func():
                 print(result_handler)
             else:
                 print(result_handler(user_input))
-
-    print("\n" * 3)
-    print("Saved notes:")
-    print("-" * 100)
-    for note in notes.show_notes():
-        print(note)
-    print("-" * 100)
-    # End
-
-
-if __name__ == "__main__":
-    notes_main_func()
