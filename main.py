@@ -1,4 +1,4 @@
-from address_book_main import address_book_main_func, ab
+from address_book_main import address_book_main_func
 from notes_main import notes_main_func
 from sort_main import sort_main_func
 
@@ -14,8 +14,6 @@ def main_func():
         input_split_list = choose_program_inp.split(' ')
 
         if choose_program_inp == 'addressbook':
-            ab.load_data()
-            print('Addressbook data has been loaded successfully!')
             address_book_main_func()
         
         elif choose_program_inp == 'notebook':
@@ -23,7 +21,6 @@ def main_func():
 
         elif input_split_list[0] == 'sorting_files':
             arg = input_split_list[1]
-            print(arg)
             sort_main_func(arg)
         
         elif choose_program_inp in ['close', 'exit']:
