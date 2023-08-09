@@ -1,5 +1,6 @@
 [build-system]
 requires = [
+    "platformdirs>=3.10.0",
     "setuptools>=65.5.0",
     "wheel"
 ]
