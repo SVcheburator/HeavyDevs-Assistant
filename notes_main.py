@@ -57,7 +57,7 @@ def add_note(user_input):
 
     notes.add_note(note)
 
-    result_note = "\n" + "This note was succesfully added!\n" + \
+    result_note = "-"*20 + "\n" + "This note was succesfully added!\n" + \
         "-"*20 + "\n" + str(note) + "\n"
 
     return result_note
@@ -104,6 +104,17 @@ def remove_note(user_input):
     notes.remove_note(note_id)
 
     return f"\nNote with id: {note_id} was succesfully removed!\n"
+
+
+def remove_all_notes(user_input):
+    if user_input.lower() != "remove_all_notes":
+        return "\nThis function is not exists. Try again!\n"
+
+    for note_id in notes.data.keys():
+        notes.remove_note(int(note_id))
+        if remove_all_notes(user_input) == None:
+            return "\nAll notes have been deleted!\n"
+        return remove_all_notes(user_input)
 
 
 def show_notes(user_input):
@@ -220,17 +231,40 @@ def remove_tags_in_note(user_input):
     return "\nTags was succesfully removed!\n"
 
 
+def mark_done(user_input):
+    try:
+        list_user_input = user_input.split("id:")
+        note_id = list_user_input[1].strip()
+    except IndexError:
+        return "\nTo mark done a note you need to write 'id: ...'\n"
+
+    try:
+        note_id = int(note_id)
+    except ValueError:
+        return "\nid must be a number\n"
+
+    if list_user_input[0].strip() == "mark_done":
+        notes.data.get(note_id).mark_done()
+        return "\nMark note was done!\n"
+    else:
+        notes.data.get(note_id).unmark_done()
+        return "\nUnmark note was done!\n"
+
+
 operations_notes = {
     "show_commands_note": show_commands_note,
     "add_note": add_note,
     "edit_note": edit_note,
     "remove_note": remove_note,
+    "remove_all_notes": remove_all_notes,
     "show_notes": show_notes,
     "search_note": search_note,
     "search_by_tags": search_by_tags,
     "add_tags_to_note": add_tags_to_note,
     "remove_tags_in_note": remove_tags_in_note,
-    "remove_all_tags_in_note": remove_tags_in_note
+    "remove_all_tags_in_note": remove_tags_in_note,
+    "mark_done": mark_done,
+    "unmark_done": mark_done
 }
 
 
