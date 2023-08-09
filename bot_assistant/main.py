@@ -1,6 +1,6 @@
-from address_book_main import address_book_main_func
-from notes_main import notes_main_func
-from sort_main import sort_main_func
+from bot_assistant.address_book_main import address_book_main_func
+from bot_assistant.notes_main import notes_main_func
+from bot_assistant.sort_main import sort_main_func
 
 
 def main_func():
