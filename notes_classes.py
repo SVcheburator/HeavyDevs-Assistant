@@ -8,6 +8,10 @@ TIME_FORMAT = "%H:%M"
 DATETIME_FORMAT = f"{DATE_FORMAT} {TIME_FORMAT}"
 
 
+class IdError(Exception):
+    pass
+
+
 class Note():
     def __init__(self, title, body, *tags):
         self.date_created = datetime.now()
@@ -94,10 +98,14 @@ class Notes(UserDict):
             if flag_clear_tags:
                 note.remove_all_tags()
             self.data[id] = note
+        else:
+            raise IdError("There is no such note")
 
     def remove_note(self, id):
         if self.data.get(id):
             self.data.pop(id)
+        else:
+            raise IdError("There is no such note")
 
     def show_notes(self, text=None):
         """
@@ -112,7 +120,7 @@ class Notes(UserDict):
                     yield f"ID: {id:08}\n{note}\n"
 
     # Виконує пошук за тегами та показує сортований список нотаток.
-    def search_and_sort_by_tags(self, *tags):
+    def search_and_sort_by_tags(self, tags):
         result_search_and_sort_body = []
         result_note = []
         search_tags = []
@@ -135,14 +143,14 @@ class Notes(UserDict):
                 if note.body == body:
                     result_search_and_sort_body[index] = note
         return result_search_and_sort_body
-    
+
     def load_from_file(self, file):
         try:
             with open(file, "rb") as fh:
                 self.data = pickle.load(fh)
         except:
             return "The file with saved notes not found, corrupted or empty."
-        
+
     def save_to_file(self, file):
         with open(file, "wb") as fh:
             pickle.dump(self.data, fh)
