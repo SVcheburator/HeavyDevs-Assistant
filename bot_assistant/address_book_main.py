@@ -2,7 +2,7 @@ import os
 import pathlib
 from datetime import datetime
 from platformdirs import user_data_dir
-from address_book_classes import Birthday, Phone, Email, Name, Record, Address, AddressBook, error_keeper 
+from bot_assistant.address_book_classes import Birthday, Phone, Email, Name, Record, Address, AddressBook, error_keeper 
 
 
 ab = AddressBook()
