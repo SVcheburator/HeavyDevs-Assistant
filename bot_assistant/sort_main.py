@@ -1,5 +1,5 @@
 import pathlib
-from sort_functions import define_data, print_data, rm_empty_dirs, sort_data
+from .sort_functions import define_data, print_data, rm_empty_dirs, sort_data
 
 
 def sort_main_func(inp_path):
