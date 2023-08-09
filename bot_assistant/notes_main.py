@@ -1,7 +1,8 @@
+import re
 import os
 import pathlib
 from platformdirs import user_data_dir
-from bot_assistant.notes_classes import Tag, Note, Notes, IdError
+from .notes_classes import Tag, Note, Notes, IdError
 
 
 notes = Notes()
@@ -9,6 +10,7 @@ notes = Notes()
 
 def input_error(func):
     def inner(user_input):
+
         try:
             result_func = func(user_input)
             return result_func
@@ -137,7 +139,6 @@ def search_note(user_input):
         return "\nYou have to write some content to find a note!\n"
 
     result_note = []
-
     for note in notes.show_notes(user_input):
         result_note.append(note)
 
@@ -195,6 +196,7 @@ def add_tags_to_note(user_input):
 
 @input_error
 def remove_tags_in_note(user_input):
+
     try:
         user_split_by_id = user_input.split("id:")
         user_split_by_tags = user_split_by_id[1].split("tags:")
@@ -291,6 +293,7 @@ def notes_main_func():
     notes.load_from_file(file_path)
 
     while True:
+
         notes.save_to_file(file_path)
         user_input = input(">>> ")
 
