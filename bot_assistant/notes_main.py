@@ -1,3 +1,4 @@
+import re
 import os
 import pathlib
 from platformdirs import user_data_dir
