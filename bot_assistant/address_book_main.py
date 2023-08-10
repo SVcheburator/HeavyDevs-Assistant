@@ -2,7 +2,15 @@ import os
 import pathlib
 from datetime import datetime
 from platformdirs import user_data_dir
+from rich import print as rprint
 from .address_book_classes import Birthday, Phone, Email, Name, Record, Address, AddressBook, error_keeper 
+
+
+TEXT_COLOR = {
+    "red": "\033[31m",
+    "green": "\033[32m",
+    "reset": "\033[0m"
+}
 
 
 ab = AddressBook()
@@ -182,13 +190,13 @@ def birthday_within_time(inp_split_lst):
         if 0 < amount < 365:
             days = amount
         else:
-            print('Incorrect number of days!\n')
+            print(TEXT_COLOR['red'] + 'Incorrect number of days!\n' + TEXT_COLOR['reset'])
             return None
     elif type == 'weeks':
         if 0 < amount <= 52:
             days = amount*7
         else:
-            print('Incorrect number of weeks!\n')
+            print(TEXT_COLOR['red'] + 'Incorrect number of weeks!\n' + TEXT_COLOR['reset'])
             return None
     elif type == 'months':
         if 0 < amount < 12:
@@ -200,10 +208,10 @@ def birthday_within_time(inp_split_lst):
                 last_date = datetime(year=now.year+1, month=(now.month+amount-12), day=now.day)
                 days = (last_date - now).days + 1
         else:
-            print('Incorrect number of months\n')
+            print(TEXT_COLOR['red'] + 'Incorrect number of months\n' + TEXT_COLOR['reset'])
             return None
     else:
-        print('Incorrect type of time interval!\n')
+        print(TEXT_COLOR['red'] + 'Incorrect type of time interval!\n' + TEXT_COLOR['reset'])
         return None
     
     result = ''
@@ -216,7 +224,7 @@ def birthday_within_time(inp_split_lst):
     if len(result) > 0:
         print(result)
     else:
-        print('No one found within this interval\n')
+        print(TEXT_COLOR['red'] + 'No one found within this interval\n' + TEXT_COLOR['reset'])
 
 
 def find_func(inp_split_lst):
@@ -251,8 +259,8 @@ def address_book_main_func():
         elif command == 'commands':
             print('\nCommands avalible:\n')
             for com in commands:
-                print(com)
-            print('For more information go to README.md\n')
+                rprint("-"+"'"+com+"'")
+            rprint('For more information go to README.md\n')
 
         elif command == 'add_contact':
             add_contact(inp_split_lst)
@@ -316,4 +324,4 @@ def address_book_main_func():
             break
 
         else:
-            print(f"\nUnknown command ({command})\nInput 'commands' to see all the commands avalible!\nFor more information go to README.md\n")
+            print(TEXT_COLOR['red'] + f"\nUnknown command ({command})\nInput 'commands' to see all the commands avalible!\nFor more information go to README.md\n" + TEXT_COLOR['reset'])
