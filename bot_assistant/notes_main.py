@@ -193,7 +193,11 @@ def add_tags_to_note(user_input):
 
     if note_tags != [""]:
         for tag in note_tags:
-            note.add_tags(Tag(tag))
+                if note.add_tags(Tag(tag)) == True:
+                    return TEXT_COLOR['green'] + "\nTags were succesfully added!\n" + TEXT_COLOR["reset"]
+                else:
+                    return TEXT_COLOR['red'] + "\nThis tags already exist!'\n" + TEXT_COLOR["reset"]
+
     else:
         return TEXT_COLOR['red'] + "\nTo add tags you need to write 'id: ... tags: ...'\n" + TEXT_COLOR["reset"]
 
