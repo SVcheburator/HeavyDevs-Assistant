@@ -52,7 +52,8 @@ def sort_data(path, defined_files):
     for key in defined_files:
         if len(defined_files[key]) > 0:
             subpath = path.joinpath(key)
-            subpath.mkdir()
+            if not subpath.is_dir():
+                subpath.mkdir()
             for i in defined_files[key]:
                 founded_ids = []
                 for file in subpath.iterdir():
@@ -61,7 +62,7 @@ def sort_data(path, defined_files):
                             founded_ids.append(1)
                         if file.stem.casefold().startswith(i.stem.casefold()):
                             suffix_string = file.stem.casefold().replace(i.stem.casefold(), "")
-                            if re.fullmatch(" \(\d+\)", suffix_string[suffix_string.rfind(" "):]):
+                            if suffix_string.find(" ") == 0 and suffix_string.count(" ") == 1 and re.fullmatch(" \(\d+\)", suffix_string):
                                 founded_ids.append(int(suffix_string[2:-1]))
                 if founded_ids:
                     id = 1
