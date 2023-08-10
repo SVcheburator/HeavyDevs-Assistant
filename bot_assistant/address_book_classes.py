@@ -381,8 +381,11 @@ class Record:
 
 class AddressBook(UserDict):
     def add_record(self, record):
-        self.data[record.name.value] = record
-        print(TEXT_COLOR['green'] + f'One contact ({record.name.value}) has been successfully added!\n' + TEXT_COLOR['reset'])
+        try:
+            self.data[record.name.value] = record
+            print(TEXT_COLOR['green'] + f'One contact ({record.name.value}) has been successfully added!\n' + TEXT_COLOR['reset'])
+        except AttributeError:
+            print(TEXT_COLOR['red'] + 'The contact has to be named!\n' + TEXT_COLOR['reset'])
 
     def delete_record(self, name_to_delete):
         for username in self.data.keys():
