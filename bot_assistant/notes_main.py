@@ -27,10 +27,11 @@ def input_error(func):
 
 
 def show_commands_note(user_input):
-    all_commands = ["add_note", "edit_note", "remove_note", "remove_all_notes", "show_notes", "search_note", "search_by_tags",
-                    "add_tags_to_note", "remove_tags_in_note", "remove_all_tags_in_note", "mark_done", "unmark_done", "exit"]
+    all_commands = ["'add_note'", "'edit_note'", "'remove_note'", "'remove_all_notes'", "'show_notes'", "'search_note'", "'search_by_tags'",
+                    "'add_tags_to_note'", "'remove_tags_in_note'", "'remove_all_tags_in_note'", "'mark_done'", "'unmark_done'", "'exit'",
+                    "'close'"]
     if user_input.strip().lower() == "show_commands_note":
-        return "\n" + "\n".join(all_commands) + "\n"
+        return "\n" + TEXT_COLOR['green'] + "\n".join(all_commands) + TEXT_COLOR["reset"] + "\n"
     else:
         return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"]
 
@@ -280,7 +281,10 @@ def get_handler(handler):
     try:
         return operations_notes[handler]
     except:
-        return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"]
+        return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"] + "\n" + \
+            "To see all functions of notebook, please write " + \
+            TEXT_COLOR['green'] + "'show_commands_note'" + \
+            TEXT_COLOR["reset"] + "\n"
 
 
 def get_file_path(file_name):
