@@ -8,6 +8,13 @@ TIME_FORMAT = "%H:%M"
 DATETIME_FORMAT = f"{DATE_FORMAT} {TIME_FORMAT}"
 
 
+TEXT_COLOR = {
+    "red": "\033[31m",
+    "green": "\033[32m",
+    "reset": "\033[0m"
+}
+
+
 class IdError(Exception):
     pass
 
@@ -18,7 +25,7 @@ class Note():
         self.date_modified = self.date_created
         self.title = title[:50]
         self.body = body
-        self.tags = set()
+        self.tags = list()
         self.add_tags(*tags)
         self.flag_done = False
 
@@ -36,11 +43,12 @@ class Note():
                 self.tags.add(tag)
             self.date_modified = datetime.now()
 
-    def remove_tags(self, *tags):
-        if tags:
-            for tag in tags:
-                self.tags.discard(tag)
-            self.date_modified = datetime.now()
+    def remove_tags(self, tag):
+        for my_tag in self.tags:
+            if tag == my_tag.tag:
+                self.tags.discard(my_tag)
+                self.date_modified = datetime.now()
+                break
 
     def remove_all_tags(self):
         if self.tags:
@@ -69,7 +77,7 @@ class Note():
 
 class Tag:
     def __init__(self, tag):
-        self.tag = tag.lower()
+        self.tag = tag.strip().lower()
 
     def __str__(self):
         return f"#{self.tag}"
@@ -149,7 +157,7 @@ class Notes(UserDict):
             with open(file, "rb") as fh:
                 self.data = pickle.load(fh)
         except:
-            return "The file with saved notes not found, corrupted or empty."
+            return TEXT_COLOR["red"] + "The file with saved notes not found, corrupted or empty." + TEXT_COLOR["reset"]
 
     def save_to_file(self, file):
         with open(file, "wb") as fh:

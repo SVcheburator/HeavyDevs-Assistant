@@ -1,13 +1,19 @@
 from .address_book_main import address_book_main_func
 from .notes_main import notes_main_func
 from .sort_main import sort_main_func
+from rich import print as rprint
 
+TEXT_COLOR = {
+    "red": "\033[31m",
+    "green": "\033[32m",
+    "reset": "\033[0m"
+}
 
 def main_func():
     print("\nHi, I'm your personal helper!")
 
     while True:
-        print("\nYou can run: \n-'addressbook'\n-'notebook' \n-'sorting_files *path*'\n\nOr close your personal helper by 'close' or 'exit'")
+        rprint("\nYou can run: \n-'addressbook'\n-'notebook' \n-'sorting_files *path*'\n\nOr close your personal helper by 'close' or 'exit'")
 
         choose_program_inp = input('\nChoose the program >>> ')
 
@@ -28,7 +34,7 @@ def main_func():
             break
         
         else:
-            print('Incorrect command!')
+            print(TEXT_COLOR['red'] + 'Incorrect command!'+ TEXT_COLOR['reset'])
 
 if __name__ == "__main__":
     main_func()

@@ -5,6 +5,13 @@ from platformdirs import user_data_dir
 from .notes_classes import Tag, Note, Notes, IdError
 
 
+TEXT_COLOR = {
+    "red": "\033[31m",
+    "green": "\033[32m",
+    "reset": "\033[0m"
+}
+
+
 notes = Notes()
 
 
@@ -15,7 +22,7 @@ def input_error(func):
             result_func = func(user_input)
             return result_func
         except IdError:
-            return "\nNote with such id does not exist!\n"
+            return TEXT_COLOR['red'] + "\nNote with such id does not exist!\n" + TEXT_COLOR["reset"]
 
     return inner
 
@@ -26,7 +33,7 @@ def show_commands_note(user_input):
     if user_input.strip().lower() == "show_commands_note":
         return "\n" + "\n".join(all_commands) + "\n"
     else:
-        return "\nThis function does not exist. Try again!\n"
+        return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"]
 
 
 def add_note(user_input):
@@ -35,7 +42,7 @@ def add_note(user_input):
         user_split_by_body = user_split_by_title[1].split("body:")
         user_split_by_tags = user_split_by_body[1].split("tags:")
     except IndexError:
-        return "\nTo add a note you need to write 'title: ... body: ... tags: ...' Tags as desired.\n"
+        return TEXT_COLOR['red'] + "\nTo add a note you need to write 'title: ... body: ... tags: ...' Tags as desired.\n" + TEXT_COLOR["reset"]
 
     note_title = user_split_by_body[0].strip()
     note_body = user_split_by_tags[0].strip()
@@ -48,7 +55,7 @@ def add_note(user_input):
     if note_title and note_body:
         note = Note(note_title, note_body)
     else:
-        return "\nYou need to write something in 'title: ... body: ...'\n"
+        return TEXT_COLOR['red'] + "\nYou need to write something in 'title: ... body: ...'\n" + TEXT_COLOR["reset"]
 
     if note_tags_list:
         for note_tag in note_tags_list:
@@ -70,7 +77,7 @@ def edit_note(user_input):
         user_split_by_title = user_split_by_id[1].split("title:")
         user_split_by_body = user_split_by_title[1].split("body:")
     except IndexError:
-        return "\nTo edit a note you need to write 'id: ... title: ... body: ...'\n"
+        return TEXT_COLOR['red'] + "\nTo edit a note you need to write 'id: ... title: ... body: ...'\n" + TEXT_COLOR["reset"]
 
     note_id = user_split_by_title[0].strip()
     note_title = user_split_by_body[0].strip()
@@ -80,12 +87,12 @@ def edit_note(user_input):
         try:
             note_id = int(note_id)
         except ValueError:
-            return "\nid must be a number\n"
+            return TEXT_COLOR['red'] + "\nid must be a number\n" + TEXT_COLOR["reset"]
 
         notes.edit_note(note_id, note_title, note_body)
-        return f"\nNote with id: {note_id} was succesfully changed!\n"
+        return TEXT_COLOR['green'] + f"\nNote with id: {note_id} was succesfully changed!\n" + TEXT_COLOR["reset"]
     else:
-        return "\nYou need to write something in 'id: ... title: ... body: ...'\n"
+        return TEXT_COLOR['red'] + "\nYou need to write something in 'id: ... title: ... body: ...'\n" + TEXT_COLOR["reset"]
 
 
 @input_error
@@ -94,26 +101,26 @@ def remove_note(user_input):
         list_user_input = user_input.split("id:")
         note_id = list_user_input[1].strip()
     except IndexError:
-        return "\nTo remove a note you need to write 'id: ...'\n"
+        return TEXT_COLOR['red'] + "\nTo remove a note you need to write 'id: ...'\n" + TEXT_COLOR["reset"]
 
     try:
         note_id = int(note_id)
     except ValueError:
-        return "\nid must be a number\n"
+        return TEXT_COLOR['red'] + "\nid must be a number\n" + TEXT_COLOR["reset"]
 
     notes.remove_note(note_id)
 
-    return f"\nNote with id: {note_id} was succesfully removed!\n"
+    return TEXT_COLOR['green'] + f"\nNote with id: {note_id} was succesfully removed!\n" + TEXT_COLOR["reset"]
 
 
 def remove_all_notes(user_input):
     if user_input.lower() != "remove_all_notes":
-        return "\nThis function does not exist. Try again!\n"
+        return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"]
 
     for note_id in notes.data.keys():
         notes.remove_note(int(note_id))
         if remove_all_notes(user_input) == None:
-            return "\nAll notes have been deleted!\n"
+            return TEXT_COLOR['green'] + "\nAll notes have been deleted!\n" + TEXT_COLOR["reset"]
         return remove_all_notes(user_input)
 
 
@@ -126,9 +133,9 @@ def show_notes(user_input):
         if result_note:
             return "\n" + "\n--------------------\n".join(result_note)
         else:
-            return "\nYour notes list is empty!\n"
+            return TEXT_COLOR['red'] + "\nYour notes list is empty!\n" + TEXT_COLOR["reset"]
     else:
-        return "\nThis function does not exist. Try again!\n"
+        return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"]
 
 
 def search_note(user_input):
@@ -136,7 +143,7 @@ def search_note(user_input):
     user_input = user_input.strip()
 
     if not user_input:
-        return "\nYou have to write some content to find a note!\n"
+        return TEXT_COLOR['red'] + "\nYou have to write some content to find a note!\n" + TEXT_COLOR["reset"]
 
     result_note = []
     for note in notes.show_notes(user_input):
@@ -145,14 +152,14 @@ def search_note(user_input):
     if result_note:
         return "\n" + "\n--------------------\n".join(result_note) + "\n"
     else:
-        return "\nYou don't have any notes with this content!\n"
+        return TEXT_COLOR['red'] + "\nYou don't have any notes with this content!\n" + TEXT_COLOR["reset"]
 
 
 def search_by_tags(user_input):
     user_input = user_input.removeprefix("search_by_tags")
     user_input = user_input.strip()
     if not user_input:
-        return "\nWrite some tags to find a note!\n"
+        return TEXT_COLOR['red'] + "\nWrite some tags to find a note!\n" + TEXT_COLOR["reset"]
     user_input = user_input.split(", ")
     result_note = []
 
@@ -162,7 +169,7 @@ def search_by_tags(user_input):
     if result_note:
         return "\n" + "\n--------------------\n".join(result_note) + "\n"
     else:
-        return "\nNo notes were found by your tags!\n"
+        return TEXT_COLOR['red'] + "\nNo notes were found by your tags!\n" + TEXT_COLOR["reset"]
 
 
 @input_error
@@ -173,12 +180,12 @@ def add_tags_to_note(user_input):
         note_tags = user_split_by_tags[1].strip()
         note_tags = note_tags.split(", ")
     except IndexError:
-        return "\nTo add tags you need to write 'id: ... tags: ...'\n"
+        return TEXT_COLOR['red'] + "\nTo add tags you need to write 'id: ... tags: ...'\n" + TEXT_COLOR["reset"]
 
     try:
         note_id = int(user_split_by_tags[0].strip())
     except ValueError:
-        return "\nid must be a number!\n"
+        return TEXT_COLOR['red'] + "\nid must be a number!\n" + TEXT_COLOR["reset"]
 
     note = notes.data.get(note_id)
 
@@ -189,9 +196,9 @@ def add_tags_to_note(user_input):
         for tag in note_tags:
             note.add_tags(Tag(tag))
     else:
-        return "\nTo add tags you need to write 'id: ... tags: ...'\n"
+        return TEXT_COLOR['red'] + "\nTo add tags you need to write 'id: ... tags: ...'\n" + TEXT_COLOR["reset"]
 
-    return "\nTags were succesfully added!\n"
+    return TEXT_COLOR['green'] + "\nTags were succesfully added!\n" + TEXT_COLOR["reset"]
 
 
 @input_error
@@ -204,7 +211,7 @@ def remove_tags_in_note(user_input):
         try:
             note_id = int(user_split_by_tags[0].strip())
         except ValueError:
-            return "\nid must be a number!\n"
+            return TEXT_COLOR['red'] + "\nid must be a number!\n" + TEXT_COLOR["reset"]
 
         note = notes.data.get(note_id)
 
@@ -215,20 +222,20 @@ def remove_tags_in_note(user_input):
             try:
                 int(user_split_by_id[1])
                 note.remove_all_tags()
-                return "\nTags were succesfully removed!\n"
+                return TEXT_COLOR['green'] + "\nTags were succesfully removed!\n" + TEXT_COLOR["reset"]
             except ValueError:
-                return "\nThis function does not exist. Try again!\n"
+                return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"]
 
         note_tags = user_split_by_tags[1].strip()
         note_tags = note_tags.split(", ")
 
     except IndexError:
-        return "\nTo remove tags you need to write 'id: ... tags: ...'.\nTo remove all tags you need to write 'id: ...'\n"
+        return TEXT_COLOR['red'] + "\nTo remove tags you need to write 'id: ... tags: ...'.\nTo remove all tags you need to write 'id: ...'\n" + TEXT_COLOR["reset"]
 
     for tag in note_tags:
-        note.remove_tags(Tag(tag))
+        note.remove_tags(tag)
 
-    return "\nTags were succesfully removed!\n"
+    return TEXT_COLOR['green'] + "\nTags were succesfully removed!\n" + TEXT_COLOR["reset"]
 
 
 def mark_done(user_input):
@@ -236,22 +243,22 @@ def mark_done(user_input):
         list_user_input = user_input.split("id:")
         note_id = list_user_input[1].strip()
     except IndexError:
-        return "\nTo mark done a note you need to write 'id: ...'\n"
+        return TEXT_COLOR['red'] + "\nTo mark done a note you need to write 'id: ...'\n" + TEXT_COLOR["reset"]
 
     try:
         note_id = int(note_id)
     except ValueError:
-        return "\nid must be a number\n"
+        return TEXT_COLOR['red'] + "\nid must be a number\n" + TEXT_COLOR["reset"]
 
     try:
         if list_user_input[0].strip() == "mark_done":
             notes.data.get(note_id).mark_done()
-            return "\nNote was marked done!\n"
+            return TEXT_COLOR['green'] + "\nNote was marked done!\n" + TEXT_COLOR["reset"]
         else:
             notes.data.get(note_id).unmark_done()
-            return "\nNote was unmarked done!\n"
+            return TEXT_COLOR['green'] + "\nNote was unmarked done!\n" + TEXT_COLOR["reset"]
     except AttributeError:
-        return "\nThere is no such note!\n"
+        return TEXT_COLOR['red'] + "\nThere is no such note!\n" + TEXT_COLOR["reset"]
 
 operations_notes = {
     "show_commands_note": show_commands_note,
@@ -274,7 +281,7 @@ def get_handler(handler):
     try:
         return operations_notes[handler]
     except:
-        return "\nThis function does not exist. Try again!\n"
+        return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"]
 
 
 def get_file_path(file_name):

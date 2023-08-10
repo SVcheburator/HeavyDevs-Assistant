@@ -4,6 +4,13 @@ from collections import UserDict
 from datetime import datetime
 
 
+TEXT_COLOR = {
+    "red": "\033[31m",
+    "green": "\033[32m",
+    "reset": "\033[0m"
+}
+
+
 # Custom errors
 class BirthdayError(Exception):
     pass
@@ -23,20 +30,20 @@ def error_keeper(function):
         try:
             function(*args)
         except BirthdayError:
-            print('That is incorrect birthday!')
+            print(TEXT_COLOR['red'] + 'That is incorrect birthday!' + TEXT_COLOR['reset'])
         except PhoneError as pe:
             if pe.args:
-                print(f'This phone number is too {pe.args[0]}!')
+                print(TEXT_COLOR['red'] + f'This phone number is too {pe.args[0]}!' + TEXT_COLOR['reset'])
             else:
-                print('That is incorrect phone number!')
+                print(TEXT_COLOR['red'] + 'That is incorrect phone number!' + TEXT_COLOR['reset'])
         except EmailError:
-            print('That is incorrect email!')
+            print(TEXT_COLOR['red'] + 'That is incorrect email!' + TEXT_COLOR['reset'])
         except ValueError:
-            print('Something is wrong!\nGo to README.md to check the correctness\n')
+            print(TEXT_COLOR['red'] + 'Something is wrong!\nGo to README.md to check the correctness\n' + TEXT_COLOR['reset'])
         except AttributeError:
-            print('Something is wrong!\nGo to README.md to check the correctness\n')
+            print(TEXT_COLOR['red'] + 'Something is wrong!\nGo to README.md to check the correctness\n' + TEXT_COLOR['reset'])
         except KeyError:
-            print('Name is incorrect!\n')
+            print(TEXT_COLOR['red'] + 'Name is incorrect!\n' + TEXT_COLOR['reset'])
 
     return inner
 
@@ -190,7 +197,7 @@ class Record:
                 self.phones.append(extra_phone)
 
             if flag == True and extra_phone.value != None:
-                print(f'Phone number {extra_phone.value} has been successfully added!\n')
+                print(TEXT_COLOR['green'] + f'Phone number {extra_phone.value} has been successfully added!\n' + TEXT_COLOR['reset'])
         except AttributeError:
             pass
 
@@ -202,14 +209,14 @@ class Record:
                     if ph.value == some_phone.value:
                         self.phones.append(different_phone)
                         self.phones.remove(ph)
-                        print(f'Phone number {some_phone.value} has been successfully changed to {different_phone.value}\n')
+                        print(TEXT_COLOR['green'] + f'Phone number {some_phone.value} has been successfully changed to {different_phone.value}\n' + TEXT_COLOR['reset'])
                         flag = True
             else:
                 flag = True
         except AttributeError:
             flag == False
         if flag == False:
-            print(f'There is no such phone!')
+            print(TEXT_COLOR['red'] + f'There is no such phone!' + TEXT_COLOR['reset'])
 
     def delete_phone(self, some_phone):
         try:
@@ -219,12 +226,12 @@ class Record:
                     if ph.value == some_phone.value:
                         self.phones.remove(ph)
                         flag = True
-                        print(f'Phone number {some_phone.value} has been successfully deleted\n')
+                        print(TEXT_COLOR['green'] + f'Phone number {some_phone.value} has been successfully deleted\n' + TEXT_COLOR['reset'])
         except AttributeError:
             flag = False
             
         if flag == False:
-            print(f'There is no such phone as {some_phone.value}\n')
+            print(TEXT_COLOR['red'] + f'There is no such phone as {some_phone.value}\n' + TEXT_COLOR['reset'])
 
     # Email operations
     def add_email(self, extra_email):
@@ -236,7 +243,7 @@ class Record:
             self.emails = []
             self.emails.append(extra_email)
 
-        print(f'Email {extra_email.value} has been successfully added!\n')
+        print(TEXT_COLOR['green'] + f'Email {extra_email.value} has been successfully added!\n' + TEXT_COLOR['reset'])
 
     def change_email(self, some_email, different_email):
         try:
@@ -246,7 +253,7 @@ class Record:
                     if em.value == some_email.value:
                         self.emails.remove(em)
                         self.emails.append(different_email)
-                        print(f'Email {some_email.value} has been successfully changed to {different_email.value}\n')
+                        print(TEXT_COLOR['green'] + f'Email {some_email.value} has been successfully changed to {different_email.value}\n' + TEXT_COLOR['reset'])
                         flag = True
             else:
                 flag = True
@@ -254,7 +261,7 @@ class Record:
             flag == False
 
         if flag == False:
-                print(f'There is no such email as {some_email.value}\n')
+                print(TEXT_COLOR['red'] + f'There is no such email as {some_email.value}\n' + TEXT_COLOR['reset'])
 
     def delete_email(self, some_email):
         flag = False
@@ -263,12 +270,12 @@ class Record:
                 if em.value == some_email.value:
                     self.emails.remove(em)
                     flag = True
-                    print(f'Email {some_email.value} has been successfully deleted\n')
+                    print(TEXT_COLOR['green'] + f'Email {some_email.value} has been successfully deleted\n' + TEXT_COLOR['reset'])
         except AttributeError:
             flag == False
 
         if flag == False:
-                print(f'There is no such email as {some_email.value}\n')
+                print(TEXT_COLOR['red'] + f'There is no such email as {some_email.value}\n' + TEXT_COLOR['reset'])
 
     # Birthday operations
     def days_to_birthday(self):
@@ -281,20 +288,20 @@ class Record:
     
     def add_birthday(self, extra_birthday):
         self.birthday = extra_birthday
-        print(f'Birthday {extra_birthday.value.date()} has been successfully added!\n')
+        print(TEXT_COLOR['green'] + f'Birthday {extra_birthday.value.date()} has been successfully added!\n' + TEXT_COLOR['reset'])
 
     def change_birthday(self, some_bd, different_bd):
         flag = False
         try:
             if self.birthday.value == some_bd.value:
                 self.birthday = different_bd
-                print(f'Birthday {some_bd.value.date()} has been successfully changed to {different_bd.value.date()}\n')
+                print(TEXT_COLOR['green'] + f'Birthday {some_bd.value.date()} has been successfully changed to {different_bd.value.date()}\n' + TEXT_COLOR['reset'])
                 flag = True
         except AttributeError:
             flag == False
 
         if flag == False:
-                print(f'There is no such birthday as {some_bd.value.date()}\n')
+                print(TEXT_COLOR['red'] + f'There is no such birthday as {some_bd.value.date()}\n' + TEXT_COLOR['reset'])
     
     def delete_birthday(self, some_bd):
         flag = False
@@ -302,17 +309,17 @@ class Record:
             if self.birthday.value == some_bd.value:
                 self.birthday = None
                 flag = True
-                print(f'Birthday {some_bd.value.date()} has been successfully deleted\n')
+                print(TEXT_COLOR['green'] + f'Birthday {some_bd.value.date()} has been successfully deleted\n' + TEXT_COLOR['reset'])
         except AttributeError:
             flag == False
         
         if flag == False:
-            print(f'There is no such birthday as {some_bd.value.date()}\n')
+            print(TEXT_COLOR['red'] + f'There is no such birthday as {some_bd.value.date()}\n' + TEXT_COLOR['reset'])
     
     #Address operations
     def add_address(self, new_address):
         self.address = new_address
-        print(f'Address \n{new_address.value} \nhas been successfully added!\n')
+        print(TEXT_COLOR['green'] + f'Address \n{new_address.value} \nhas been successfully added!\n' + TEXT_COLOR['reset'])
 
    
     def change_address(self, old_adr, new_adr):
@@ -320,13 +327,13 @@ class Record:
         try:
             if self.address.value == old_adr.value:
                 self.address = new_adr
-                print(f'Address \n{old_adr.value} \nhas been successfully changed to \n{new_adr.value}\n')
+                print(TEXT_COLOR['green'] + f'Address \n{old_adr.value} \nhas been successfully changed to \n{new_adr.value}\n' + TEXT_COLOR['reset'])
                 flag = True
         except AttributeError:
             flag == False
         
         if flag == False:
-            print(f'There is no such address as \n{old_adr.value}\n')
+            print(TEXT_COLOR['red'] + f'There is no such address as \n{old_adr.value}\n' + TEXT_COLOR['reset'])
 
     def delete_address(self, some_adr):
         flag = False
@@ -334,12 +341,12 @@ class Record:
             if self.address.value == some_adr.value:
                 self.address = None
                 flag = True
-                print(f'Address \n{some_adr.value} \nhas been successfully deleted\n')
+                print(TEXT_COLOR['green'] + f'Address \n{some_adr.value} \nhas been successfully deleted\n' + TEXT_COLOR['reset'])
         except AttributeError:
             flag == False
         
         if flag == False:
-            print(f'There is no such address as \n{some_adr.value}\n')
+            print(TEXT_COLOR['red'] + f'There is no such address as \n{some_adr.value}\n' + TEXT_COLOR['reset'])
 
     def __str__(self):
         result = f'\nName: {self.name.value}\n'
@@ -375,16 +382,16 @@ class Record:
 class AddressBook(UserDict):
     def add_record(self, record):
         self.data[record.name.value] = record
-        print(f'One contact ({record.name.value}) has been successfully added!\n')
+        print(TEXT_COLOR['green'] + f'One contact ({record.name.value}) has been successfully added!\n' + TEXT_COLOR['reset'])
 
     def delete_record(self, name_to_delete):
         for username in self.data.keys():
             if username == name_to_delete:
                 del self.data[username]
-                print(f'Contact ({username}) has been deleted successfully!\n')
+                print(TEXT_COLOR['green'] + f'Contact ({username}) has been deleted successfully!\n' + TEXT_COLOR['reset'])
                 return None
             
-        print(f'There is no such contact as {name_to_delete}\n')
+        print(TEXT_COLOR['red'] + f'There is no such contact as {name_to_delete}\n' + TEXT_COLOR['reset'])
 
     def find_contact(self, inp):
         def inner_find(inp, rec):
@@ -413,7 +420,7 @@ class AddressBook(UserDict):
         if len(result) > 0:
             print(result)
         else:
-            print(f"Nothing was found by '{inp}'\n")
+            print(TEXT_COLOR['red'] + f"Nothing was found by '{inp}'\n" + TEXT_COLOR['reset'])
     
     # Autosave functions
     def load_from_file(self, file):
@@ -435,7 +442,7 @@ class AddressBook(UserDict):
             self.current_index += 1
             result = list(enumerate(self))
             return self.data[result[self.current_index-1][1]]
-        print('Here is the end of your address book!\n')
+        print(TEXT_COLOR['green'] + 'Here is the end of your address book!\n' + TEXT_COLOR['reset'])
         self.current_index = 0
         raise StopIteration
 
