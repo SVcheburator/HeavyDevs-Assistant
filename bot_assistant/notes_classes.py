@@ -38,9 +38,13 @@ class Note():
         self.date_modified = datetime.now()
 
     def add_tags(self, *tags):
+        tag_note_list = []
+        for tag_note in self.tags:
+            tag_note_list.append(tag_note.tag)
         if tags:
             for tag in tags:
-                self.tags.add(tag)
+                if not tag.tag in tag_note_list:
+                    self.tags.add(tag)
             self.date_modified = datetime.now()
 
     def remove_tags(self, tag):

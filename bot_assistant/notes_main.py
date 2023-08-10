@@ -58,8 +58,7 @@ def add_note(user_input):
 
     if note_tags_list:
         for note_tag in note_tags_list:
-            note_tag = Tag(note_tag)
-            note.add_tags(note_tag)
+            note.add_tags(Tag(note_tag))
 
     notes.add_note(note)
 
