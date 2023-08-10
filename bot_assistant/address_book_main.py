@@ -218,7 +218,7 @@ def birthday_within_time(inp_split_lst):
     result = ''
 
     for rec in ab.data.values():
-        if rec.birthday != None:
+        if rec.birthday != None and rec.days_to_birthday() != None:
             if rec.days_to_birthday() <= days:
                 result += str(rec)
     
