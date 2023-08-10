@@ -279,12 +279,15 @@ class Record:
 
     # Birthday operations
     def days_to_birthday(self):
-        self.birthday.value
-        bd = datetime(year=datetime.now().year, month=self.birthday.value.month, day=self.birthday.value.day)
-        delta = bd - datetime.now()
-        if delta.days < 0:
-            delta = datetime(year=datetime.now().year+1, month=self.birthday.value.month, day=self.birthday.value.day) - datetime.now()
-        return delta.days+1
+        try:
+            self.birthday.value
+            bd = datetime(year=datetime.now().year, month=self.birthday.value.month, day=self.birthday.value.day)
+            delta = bd - datetime.now()
+            if delta.days < 0:
+                delta = datetime(year=datetime.now().year+1, month=self.birthday.value.month, day=self.birthday.value.day) - datetime.now()
+            return delta.days+1
+        except AttributeError:
+            pass
     
     def add_birthday(self, extra_birthday):
         self.birthday = extra_birthday
