@@ -1,6 +1,7 @@
 import os
 import pathlib
 from platformdirs import user_data_dir
+from rich import print as rprint
 from .notes_classes import Tag, Note, Notes, IdError
 
 
@@ -27,11 +28,13 @@ def input_error(func):
 
 
 def show_commands_note(user_input):
-    all_commands = ["'add_note'", "'edit_note'", "'remove_note'", "'remove_all_notes'", "'show_notes'", "'search_note'", "'search_by_tags'",
-                    "'add_tags_to_note'", "'remove_tags_in_note'", "'remove_all_tags_in_note'", "'mark_done'", "'unmark_done'", "'exit'",
-                    "'close'"]
-    if user_input.strip().lower() == "show_commands_note":
-        return "\n" + TEXT_COLOR['green'] + "\n".join(all_commands) + TEXT_COLOR["reset"] + "\n"
+    all_commands = ["add_note", "edit_note", "remove_note", "remove_all_notes", "show_notes", "search_note", "search_by_tags",
+                    "add_tags_to_note", "remove_tags_in_note", "remove_all_tags_in_note", "mark_done", "unmark_done", "exit",
+                    "close"]
+    if user_input.strip().lower() == "commands":
+        for com in all_commands:
+            rprint("-"+"'"+com+"'")
+        return ''
     else:
         return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"]
 
@@ -265,7 +268,7 @@ def mark_done(user_input):
 
 
 operations_notes = {
-    "show_commands_note": show_commands_note,
+    "commands": show_commands_note,
     "add_note": add_note,
     "edit_note": edit_note,
     "remove_note": remove_note,
@@ -305,6 +308,7 @@ def notes_main_func():
     global notes
     file_path = get_file_path("notes.bin")
     notes.load_from_file(file_path)
+    rprint("\nInput 'commands' to see all the commands avalible!\n")
 
     while True:
 
