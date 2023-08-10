@@ -233,7 +233,7 @@ def remove_tags_in_note(user_input):
         return TEXT_COLOR['red'] + "\nTo remove tags you need to write 'id: ... tags: ...'.\nTo remove all tags you need to write 'id: ...'\n" + TEXT_COLOR["reset"]
 
     for tag in note_tags:
-        note.remove_tags(tag)
+        note.remove_tags(tag.lower())
 
     return TEXT_COLOR['green'] + "\nTags were succesfully removed!\n" + TEXT_COLOR["reset"]
 
