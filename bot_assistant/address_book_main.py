@@ -31,7 +31,8 @@ def iter():
         print(rec)
 
         if (counter % 2) == 0:
-            inp = str(input("type 'next' to see the next page or type enything else to stop\n>>> "))
+            rprint("type 'next' to see the next page or type enything else to stop")
+            inp = str(input(">>> "))
             if inp == 'next':
                 continue
             else:
