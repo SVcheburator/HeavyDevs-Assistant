@@ -64,7 +64,7 @@ def add_note(user_input):
 
     notes.add_note(note)
 
-    result_note = "-"*20 + "\n" + "This note was succesfully added!\n" + \
+    result_note = "-"*20 + "\n" + TEXT_COLOR['green'] + "This note was succesfully added!\n" + TEXT_COLOR["reset"] + \
         "-"*20 + "\n" + str(note) + "\n"
 
     return result_note
@@ -119,9 +119,9 @@ def remove_all_notes(user_input):
 
     for note_id in notes.data.keys():
         notes.remove_note(int(note_id))
-        if remove_all_notes(user_input) == None:
-            return TEXT_COLOR['green'] + "\nAll notes have been deleted!\n" + TEXT_COLOR["reset"]
         return remove_all_notes(user_input)
+
+    return TEXT_COLOR['green'] + "\nAll notes have been deleted!\n" + TEXT_COLOR["reset"]
 
 
 def show_notes(user_input):
@@ -259,6 +259,7 @@ def mark_done(user_input):
             return TEXT_COLOR['green'] + "\nNote was unmarked done!\n" + TEXT_COLOR["reset"]
     except AttributeError:
         return TEXT_COLOR['red'] + "\nThere is no such note!\n" + TEXT_COLOR["reset"]
+
 
 operations_notes = {
     "show_commands_note": show_commands_note,
