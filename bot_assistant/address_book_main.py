@@ -244,6 +244,7 @@ def get_file_path(file_name):
 def address_book_main_func():
     file_path = get_file_path("addressbook.bin")
     ab.load_from_file(file_path)
+    rprint("\nInput 'commands' to see all the commands avalible!\n")
 
     while True:
         ab.save_to_file(file_path)
