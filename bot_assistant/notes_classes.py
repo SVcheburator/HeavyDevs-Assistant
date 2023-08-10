@@ -25,7 +25,7 @@ class Note():
         self.date_modified = self.date_created
         self.title = title[:50]
         self.body = body
-        self.tags = list()
+        self.tags = set()
         self.add_tags(*tags)
         self.flag_done = False
 
