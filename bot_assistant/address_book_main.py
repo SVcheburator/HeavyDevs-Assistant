@@ -3,7 +3,7 @@ import pathlib
 from datetime import datetime
 from platformdirs import user_data_dir
 from rich import print as rprint
-from .address_book_classes import Birthday, Phone, Email, Name, Record, Address, AddressBook, error_keeper 
+from .address_book_classes import Birthday, Phone, Email, Name, Record, Address, AddressBook, error_keeper
 
 
 TEXT_COLOR = {
