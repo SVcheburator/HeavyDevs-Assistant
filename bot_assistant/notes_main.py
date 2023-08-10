@@ -27,10 +27,11 @@ def input_error(func):
 
 
 def show_commands_note(user_input):
-    all_commands = ["add_note", "edit_note", "remove_note", "remove_all_notes", "show_notes", "search_note", "search_by_tags",
-                    "add_tags_to_note", "remove_tags_in_note", "remove_all_tags_in_note", "mark_done", "unmark_done", "exit"]
+    all_commands = ["'add_note'", "'edit_note'", "'remove_note'", "'remove_all_notes'", "'show_notes'", "'search_note'", "'search_by_tags'",
+                    "'add_tags_to_note'", "'remove_tags_in_note'", "'remove_all_tags_in_note'", "'mark_done'", "'unmark_done'", "'exit'",
+                    "'close'"]
     if user_input.strip().lower() == "show_commands_note":
-        return "\n" + "\n".join(all_commands) + "\n"
+        return "\n" + TEXT_COLOR['green'] + "\n".join(all_commands) + TEXT_COLOR["reset"] + "\n"
     else:
         return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"]
 
@@ -58,12 +59,11 @@ def add_note(user_input):
 
     if note_tags_list:
         for note_tag in note_tags_list:
-            note_tag = Tag(note_tag)
-            note.add_tags(note_tag)
+            note.add_tags(Tag(note_tag))
 
     notes.add_note(note)
 
-    result_note = "-"*20 + "\n" + "This note was succesfully added!\n" + \
+    result_note = "-"*20 + "\n" + TEXT_COLOR['green'] + "This note was succesfully added!\n" + TEXT_COLOR["reset"] + \
         "-"*20 + "\n" + str(note) + "\n"
 
     return result_note
@@ -118,9 +118,9 @@ def remove_all_notes(user_input):
 
     for note_id in notes.data.keys():
         notes.remove_note(int(note_id))
-        if remove_all_notes(user_input) == None:
-            return TEXT_COLOR['green'] + "\nAll notes have been deleted!\n" + TEXT_COLOR["reset"]
         return remove_all_notes(user_input)
+
+    return TEXT_COLOR['green'] + "\nAll notes have been deleted!\n" + TEXT_COLOR["reset"]
 
 
 def show_notes(user_input):
@@ -232,7 +232,7 @@ def remove_tags_in_note(user_input):
         return TEXT_COLOR['red'] + "\nTo remove tags you need to write 'id: ... tags: ...'.\nTo remove all tags you need to write 'id: ...'\n" + TEXT_COLOR["reset"]
 
     for tag in note_tags:
-        note.remove_tags(tag)
+        note.remove_tags(tag.lower())
 
     return TEXT_COLOR['green'] + "\nTags were succesfully removed!\n" + TEXT_COLOR["reset"]
 
@@ -259,6 +259,7 @@ def mark_done(user_input):
     except AttributeError:
         return TEXT_COLOR['red'] + "\nThere is no such note!\n" + TEXT_COLOR["reset"]
 
+
 operations_notes = {
     "show_commands_note": show_commands_note,
     "add_note": add_note,
@@ -280,7 +281,10 @@ def get_handler(handler):
     try:
         return operations_notes[handler]
     except:
-        return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"]
+        return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"] + "\n" + \
+            "To see all functions of notebook, please write " + \
+            TEXT_COLOR['green'] + "'show_commands_note'" + \
+            TEXT_COLOR["reset"] + "\n"
 
 
 def get_file_path(file_name):
