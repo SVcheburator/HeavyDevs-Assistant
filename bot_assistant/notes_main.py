@@ -196,15 +196,14 @@ def add_tags_to_note(user_input):
 
     if note_tags != [""]:
         for tag in note_tags:
-                if note.add_tags(Tag(tag)) == True:
-                    return TEXT_COLOR['green'] + "\nTags were succesfully added!\n" + TEXT_COLOR["reset"]
-                else:
-                    return TEXT_COLOR['red'] + "\nThis tags already exist!'\n" + TEXT_COLOR["reset"]
+            if note.add_tags(Tag(tag)) == True:
+                result = TEXT_COLOR['green'] + "\nTags were succesfully added!\n" + TEXT_COLOR["reset"]
+            else:
+                result = TEXT_COLOR['red'] + "\nThis tags already exist!'\n" + TEXT_COLOR["reset"]   
+        return result
 
     else:
         return TEXT_COLOR['red'] + "\nTo add tags you need to write 'id: ... tags: ...'\n" + TEXT_COLOR["reset"]
-
-    return TEXT_COLOR['green'] + "\nTags were succesfully added!\n" + TEXT_COLOR["reset"]
 
 
 @input_error
@@ -290,7 +289,7 @@ def get_handler(handler):
     except:
         return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"] + "\n" + \
             "To see all functions of notebook, please write " + \
-            TEXT_COLOR['green'] + "'show_commands_note'" + \
+            TEXT_COLOR['green'] + "'commands'" + \
             TEXT_COLOR["reset"] + "\n"
 
 
