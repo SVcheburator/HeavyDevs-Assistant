@@ -398,6 +398,10 @@ class AddressBook(UserDict):
                 return None
             
         print(TEXT_COLOR['red'] + f'There is no such contact as {name_to_delete}\n' + TEXT_COLOR['reset'])
+    
+    def clear_data(self):
+        self.data.clear()
+        print(TEXT_COLOR['green'] + '\nYour addressbook was cleared successfully!\n' + TEXT_COLOR['reset'])
 
     def find_contact(self, inp):
         def inner_find(inp, rec):
