@@ -28,7 +28,13 @@ def main_func():
         elif input_split_list[0] == 'sorting_files':
             try:
                 arg = input_split_list[1]
-                sort_main_func(arg)
+                confirm_input = input(TEXT_COLOR['red'] + f"\nAre you sure you want to sort all the files in ({arg}) path !? \n(y/n) >>> " + TEXT_COLOR['reset'])
+                if confirm_input.lower() == 'y':
+                    sort_main_func(arg)
+                elif confirm_input.lower() == 'n':
+                    print('\nOk')
+                else:
+                    print(TEXT_COLOR['red'] + '\nIncorrect input!\n' + TEXT_COLOR['reset'])
             except IndexError:
                 print(TEXT_COLOR['red'] + "\nTo sort files in folder you need to write 'sorting_files *path*'\n" + TEXT_COLOR["reset"])
         
