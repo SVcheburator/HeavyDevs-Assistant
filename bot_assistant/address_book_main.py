@@ -113,74 +113,56 @@ def add_contact(inp_split_lst):
 # Field operations
 @error_keeper
 def add_field(inp_split_lst, type):
-    if type == 'number':
-        name = ' '.join(inp_split_lst[1:inp_split_lst.index('phone')])
-        add_ph = ' '.join(inp_split_lst[inp_split_lst.index('phone')+1:])
-        ab[name].add_phone(Phone(phone=add_ph))
+    name = ' '.join(inp_split_lst[1:inp_split_lst.index(type)])
+    add = ' '.join(inp_split_lst[inp_split_lst.index(type)+1:])
+
+    if type == 'phone':
+        ab[name].add_phone(Phone(phone=add))
 
     elif type == 'email':
-        name = ' '.join(inp_split_lst[1:inp_split_lst.index('email')])
-        add_em = ' '.join(inp_split_lst[inp_split_lst.index('email')+1:])
-        ab[name].add_email(Email(email=add_em))
+        ab[name].add_email(Email(email=add))
 
     elif type == 'birthday':
-        name = ' '.join(inp_split_lst[1:inp_split_lst.index('birthday')])
-        add_bd = ' '.join(inp_split_lst[inp_split_lst.index('birthday')+1:])
-        ab[name].add_birthday(Birthday(birthday=add_bd))
+        ab[name].add_birthday(Birthday(birthday=add))
 
     elif type == 'address':
-        name = ' '.join(inp_split_lst[1:inp_split_lst.index('address')])
-        add_adr = ' '.join(inp_split_lst[inp_split_lst.index('address')+1:])
-        ab[name].add_address(Address(address=add_adr))
+        ab[name].add_address(Address(address=add))
 
 @error_keeper
 def change_field(inp_split_lst, type):
-    if type == 'number':
-        name = ' '.join(inp_split_lst[1:inp_split_lst.index('phone')])
-        change_ph_from = ' '.join(inp_split_lst[inp_split_lst.index('phone')+1:inp_split_lst.index('to')])
-        change_ph_to = ' '.join(inp_split_lst[inp_split_lst.index('to')+1:])
-        ab[name].change_phone(Phone(phone=change_ph_from), Phone(phone=change_ph_to))
+    name = ' '.join(inp_split_lst[1:inp_split_lst.index(type)])
+    change_from = ' '.join(inp_split_lst[inp_split_lst.index(type)+1:inp_split_lst.index('to')])
+    change_to = ' '.join(inp_split_lst[inp_split_lst.index('to')+1:])
+
+    if type == 'phone':
+        ab[name].change_phone(Phone(phone=change_from), Phone(phone=change_to))
 
     elif type == 'email':
-        name = ' '.join(inp_split_lst[1:inp_split_lst.index('email')])
-        change_em_from = ' '.join(inp_split_lst[inp_split_lst.index('email')+1:inp_split_lst.index('to')])
-        change_em_to = ' '.join(inp_split_lst[inp_split_lst.index('to')+1:])
-        ab[name].change_email(Email(email=change_em_from), Email(email=change_em_to))
+        ab[name].change_email(Email(email=change_from), Email(email=change_to))
 
     elif type == 'birthday':
-        name = ' '.join(inp_split_lst[1:inp_split_lst.index('birthday')])
-        change_bd_from = ' '.join(inp_split_lst[inp_split_lst.index('birthday')+1:inp_split_lst.index('to')])
-        change_bd_to = ' '.join(inp_split_lst[inp_split_lst.index('to')+1:])
-        ab[name].change_birthday(Birthday(birthday=change_bd_from), Birthday(birthday=change_bd_to))
+        ab[name].change_birthday(Birthday(birthday=change_from), Birthday(birthday=change_to))
 
     elif type == 'address':
-        name = ' '.join(inp_split_lst[1:inp_split_lst.index('address')])
-        change_adr_from = ' '.join(inp_split_lst[inp_split_lst.index('address')+1:inp_split_lst.index('to')])
-        change_adr_to = ' '.join(inp_split_lst[inp_split_lst.index('to')+1:])
-        ab[name].change_address(Address(address=change_adr_from), Address(address=change_adr_to))
+        ab[name].change_address(Address(address=change_from), Address(address=change_to))
 
 
 @error_keeper
 def delete_field(inp_split_lst, type):
-    if type == 'number':
-        name = ' '.join(inp_split_lst[1:inp_split_lst.index('phone')])
-        del_ph = ' '.join(inp_split_lst[inp_split_lst.index('phone')+1:])
-        ab[name].delete_phone(Phone(phone=del_ph))
+    name = ' '.join(inp_split_lst[1:inp_split_lst.index(type)])
+    del_item = ' '.join(inp_split_lst[inp_split_lst.index(type)+1:])
+    
+    if type == 'phone':
+        ab[name].delete_phone(Phone(phone=del_item))
 
     elif type == 'email':
-        name = ' '.join(inp_split_lst[1:inp_split_lst.index('email')])
-        del_em = ' '.join(inp_split_lst[inp_split_lst.index('email')+1:])
-        ab[name].delete_email(Email(email=del_em))
+        ab[name].delete_email(Email(email=del_item))
 
     elif type == 'birthday':
-        name = ' '.join(inp_split_lst[1:inp_split_lst.index('birthday')])
-        del_bd = ' '.join(inp_split_lst[inp_split_lst.index('birthday')+1:])
-        ab[name].delete_birthday(Birthday(birthday=del_bd))
+        ab[name].delete_birthday(Birthday(birthday=del_item))
 
     elif type == 'address':
-        name = ' '.join(inp_split_lst[1:inp_split_lst.index('address')])
-        del_adr = ' '.join(inp_split_lst[inp_split_lst.index('address')+1:])
-        ab[name].delete_address(Address(address=del_adr))
+        ab[name].delete_address(Address(address=del_item))
 
 
 def birthday_within_time(inp_split_lst):
@@ -252,7 +234,7 @@ def address_book_main_func():
 
         ask = input('>>> ')
         inp_split_lst = ask.split(' ')
-        commands = ['add_contact', 'delete_contact', 'clear_addressbook', 'add_number', 'change_number', 'delete_number', 'add_email', 'change_email', 'delete_email', 'add_birthday', 'change_birthday', 'delete_birthday', 'birthday_within', "add_address", "change_address", "delete_address", 'find', 'show', 'show_all', 'close', 'exit']
+        commands = ['add_contact', 'delete_contact', 'clear_addressbook', 'add_phone', 'change_phone', 'delete_phone', 'add_email', 'change_email', 'delete_email', 'add_birthday', 'change_birthday', 'delete_birthday', 'birthday_within', "add_address", "change_address", "delete_address", 'find', 'show', 'show_all', 'close', 'exit']
         command = inp_split_lst[0].lower()
         
         if command == 'hello':
@@ -282,14 +264,14 @@ def address_book_main_func():
             else:
                 print(TEXT_COLOR['red'] + '\nIncorrect input!\n' + TEXT_COLOR['reset'])
 
-        elif command == 'add_number':
-            add_field(inp_split_lst, 'number')
+        elif command == 'add_phone':
+            add_field(inp_split_lst, 'phone')
 
-        elif command == 'change_number':
-            change_field(inp_split_lst, 'number')
+        elif command == 'change_phone':
+            change_field(inp_split_lst, 'phone')
 
-        elif command == 'delete_number':
-            delete_field(inp_split_lst, 'number')
+        elif command == 'delete_phone':
+            delete_field(inp_split_lst, 'phone')
         
         elif command == 'add_email':
             add_field(inp_split_lst, 'email')

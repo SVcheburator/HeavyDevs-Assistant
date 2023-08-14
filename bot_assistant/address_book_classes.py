@@ -235,15 +235,16 @@ class Record:
 
     # Email operations
     def add_email(self, extra_email):
-        try:
-            self.emails.append(extra_email)
-            for x in self.emails:
-                x.value
-        except AttributeError:
-            self.emails = []
-            self.emails.append(extra_email)
+        if extra_email.value != None:
+            try:
+                self.emails.append(extra_email)
+                for x in self.emails:
+                    x.value
+            except AttributeError:
+                self.emails = []
+                self.emails.append(extra_email)
 
-        print(TEXT_COLOR['green'] + f'Email {extra_email.value} has been successfully added!\n' + TEXT_COLOR['reset'])
+            print(TEXT_COLOR['green'] + f'Email {extra_email.value} has been successfully added!\n' + TEXT_COLOR['reset'])
 
     def change_email(self, some_email, different_email):
         try:
