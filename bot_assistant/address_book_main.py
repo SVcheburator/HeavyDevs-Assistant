@@ -2,8 +2,8 @@ import os
 import pathlib
 from datetime import datetime
 from platformdirs import user_data_dir
-from rich import print as rprint
 from .address_book_classes import Birthday, Phone, Email, Name, Record, Address, AddressBook, error_keeper
+from .user_interaction import ConsoleInteraction
 
 
 TEXT_COLOR = {
@@ -11,6 +11,10 @@ TEXT_COLOR = {
     "green": "\033[32m",
     "reset": "\033[0m"
 }
+
+# Default print and input replacement
+print = ConsoleInteraction.user_output
+input = ConsoleInteraction.user_input
 
 
 ab = AddressBook()
@@ -31,7 +35,7 @@ def iter():
         print(rec)
 
         if (counter % 2) == 0:
-            rprint("type 'next' to see the next page or type enything else to stop")
+            print("type 'next' to see the next page or type enything else to stop", richprint=True)
             inp = str(input(">>> "))
             if inp == 'next':
                 continue
@@ -227,7 +231,7 @@ def get_file_path(file_name):
 def address_book_main_func():
     file_path = get_file_path("addressbook.bin")
     ab.load_from_file(file_path)
-    rprint("\nInput 'commands' to see all the commands avalible!\n")
+    print("\nInput 'commands' to see all the commands avalible!\n", richprint=True)
 
     while True:
         ab.save_to_file(file_path)
@@ -243,8 +247,8 @@ def address_book_main_func():
         elif command == 'commands':
             print('\nCommands avalible:\n')
             for com in commands:
-                rprint("-"+"'"+com+"'")
-            rprint('For more information go to README.md\n')
+                print("-"+"'"+com+"'", richprint=True)
+            print('For more information go to README.md\n', richprint=True)
 
         elif command == 'add_contact':
             add_contact(inp_split_lst)

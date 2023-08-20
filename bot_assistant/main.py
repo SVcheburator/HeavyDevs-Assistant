@@ -1,7 +1,7 @@
 from .address_book_main import address_book_main_func
 from .notes_main import notes_main_func
 from .sort_main import sort_main_func
-from rich import print as rprint
+from .user_interaction import ConsoleInteraction
 
 TEXT_COLOR = {
     "red": "\033[31m",
@@ -9,11 +9,16 @@ TEXT_COLOR = {
     "reset": "\033[0m"
 }
 
+# Default print and input replacement
+print = ConsoleInteraction.user_output
+input = ConsoleInteraction.user_input
+
+
 def main_func():
     print("\nHi, I'm your personal helper!")
 
     while True:
-        rprint("\nYou can run: \n-'addressbook'\n-'notebook' \n-'sorting_files *path*'\n\nOr close your personal helper by 'close' or 'exit'")
+        print("\nYou can run: \n-'addressbook'\n-'notebook' \n-'sorting_files *path*'\n\nOr close your personal helper by 'close' or 'exit'", richprint=True)
 
         choose_program_inp = input('\nChoose the program >>> ')
 

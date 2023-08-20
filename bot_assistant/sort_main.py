@@ -1,5 +1,6 @@
 import pathlib
 from .sort_functions import define_data, print_data, rm_empty_dirs, sort_data
+from .user_interaction import ConsoleInteraction
 
 
 TEXT_COLOR = {
@@ -7,6 +8,10 @@ TEXT_COLOR = {
     "green": "\033[32m",
     "reset": "\033[0m"
 }
+
+# Default print and input replacement
+print = ConsoleInteraction.user_output
+input = ConsoleInteraction.user_input
 
 
 def sort_main_func(inp_path):

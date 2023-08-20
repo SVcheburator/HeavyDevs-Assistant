@@ -2,6 +2,7 @@ import pickle
 import re
 from collections import UserDict
 from datetime import datetime
+from .user_interaction import ConsoleInteraction
 
 
 TEXT_COLOR = {
@@ -9,6 +10,10 @@ TEXT_COLOR = {
     "green": "\033[32m",
     "reset": "\033[0m"
 }
+
+# Default print and input replacement
+print = ConsoleInteraction.user_output
+input = ConsoleInteraction.user_input
 
 
 # Custom errors

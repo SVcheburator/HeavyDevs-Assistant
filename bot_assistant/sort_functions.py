@@ -1,5 +1,10 @@
 import re
+from .user_interaction import ConsoleInteraction
 
+
+# Default print and input replacement
+print = ConsoleInteraction.user_output
+input = ConsoleInteraction.user_input
 
 CATEGORY_EXTS = {
     "archives": ('zip', 'gz', 'tar', '7z', 'rar', 'arj', 'pkg', 'deb', 'rpm', 'z'),
