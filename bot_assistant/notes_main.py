@@ -1,8 +1,8 @@
 import os
 import pathlib
 from platformdirs import user_data_dir
-from rich import print as rprint
 from .notes_classes import Tag, Note, Notes, IdError
+from .user_interaction import ConsoleInteraction
 
 
 TEXT_COLOR = {
@@ -10,6 +10,10 @@ TEXT_COLOR = {
     "green": "\033[32m",
     "reset": "\033[0m"
 }
+
+# Default print and input replacement
+print = ConsoleInteraction.user_output
+input = ConsoleInteraction.user_input
 
 
 notes = Notes()
@@ -33,7 +37,7 @@ def show_commands_note(user_input):
                     "close"]
     if user_input.strip().lower() == "commands":
         for com in all_commands:
-            rprint("-"+"'"+com+"'")
+            print("-"+"'"+com+"'", richprint=True)
         return ''
     else:
         return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"]
@@ -307,7 +311,7 @@ def notes_main_func():
     global notes
     file_path = get_file_path("notes.bin")
     notes.load_from_file(file_path)
-    rprint("\nInput 'commands' to see all the commands avalible!\n")
+    print("\nInput 'commands' to see all the commands avalible!\n", richprint=True)
 
     while True:
 
