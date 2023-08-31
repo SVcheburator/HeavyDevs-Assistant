@@ -218,23 +218,14 @@ def find_func(inp_split_lst):
     inp = ' '.join(inp_split_lst[1:]).strip()
     ab.find_contact(inp)
 
-def get_file_path(file_name):
-    path = pathlib.Path(user_data_dir("Personal assistant"))
-    if os.name == "nt":
-        path = path.parent
-    if not path.is_dir():
-        path.mkdir()
-    file_path = path.joinpath(file_name)
-    return file_path
 
 # Main function with all input logic
 def address_book_main_func():
-    file_path = get_file_path("addressbook.bin")
-    ab.load_from_file(file_path)
+    ab.load_from_file('save_addressbook.bin')
     print("\nInput 'commands' to see all the commands avalible!\n", richprint=True)
 
     while True:
-        ab.save_to_file(file_path)
+        ab.save_to_file('save_addressbook.bin')
 
         ask = input('>>> ')
         inp_split_lst = ask.split(' ')
