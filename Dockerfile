@@ -18,4 +18,4 @@ RUN pip install bot_assistant-0.1.0-py3-none-any.whl
 EXPOSE 5000
 
 # Запустимо наш застосунок всередині контейнера
-ENTRYPOINT ["bot-assistant"]
+ENTRYPOINT ["bot-assistant", "docker"]

@@ -13,16 +13,17 @@ This guide will take you through the steps to set up and run the project on your
 
 ### Installation
 
-Steps to install the project:
+Steps to install the project in a standart way:
 
 1. Clone the repository: https://github.com/SVcheburator/Course_project.git
 2. Go to the project directory: `cd Course_project`
-3. Copy file `bot_assistant-0.1.0-py3-none-any.whl` from `dist` directory
-4. Run the command to install the package: `pip install bot_assistant-0.1.0-py3-none-any.whl`
+3. Run the command to install the package: `pip install bot_assistant-0.1.0-py3-none-any.whl`
 
 ### Using
 
-Start the program with the command: `bot-assistant`
+Start the program in a standart mode with the command: `bot-assistant`
+
+Start the program in a docker mode with the command: `bot-assistant docker`
 
 ---------
 
