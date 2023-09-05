@@ -20,7 +20,8 @@ class IdError(Exception):
 
 
 class Note():
-    def __init__(self, title, body, *tags):
+    def __init__(self, title, body, ch, *tags):
+        self.chart = ch
         self.date_created = datetime.now()
         self.date_modified = self.date_created
         self.title = title[:50]
@@ -32,10 +33,12 @@ class Note():
     def edit_title(self, title):
         self.title = title[:50]
         self.date_modified = datetime.now()
+        self.chart.add_point()
 
     def edit_body(self, body):
         self.body = body
         self.date_modified = datetime.now()
+        self.chart.add_point()
 
     def add_tags(self, *tags):
         tag_note_list = []
@@ -47,6 +50,7 @@ class Note():
                 if not tag.tag in tag_note_list:
                     self.tags.add(tag)
                     self.date_modified = datetime.now()
+                    self.chart.add_point()
                     return True
                 return False
 
@@ -55,20 +59,24 @@ class Note():
             if tag == my_tag.tag:
                 self.tags.discard(my_tag)
                 self.date_modified = datetime.now()
+                self.chart.add_point()
                 break
 
     def remove_all_tags(self):
         if self.tags:
             self.tags.clear()
             self.date_modified = datetime.now()
+            self.chart.add_point()
 
     def mark_done(self):
         self.flag_done = True
         self.date_modified = datetime.now()
+        self.chart.add_point()
 
     def unmark_done(self):
         self.flag_done = False
         self.date_modified = datetime.now()
+        self.chart.add_point()
 
     def get_date_modified(self):
         return self.date_modified
@@ -94,12 +102,17 @@ class Tag:
 
 
 class Notes(UserDict):
+    def __init__(self, ch) -> None:
+        super().__init__()
+        self.chart = ch
+
     def add_note(self, note: Note):
         id = 0
         while True:
             id += 1
             if not self.data.get(id):
                 self.data[id] = note
+                self.chart.add_point()
                 break
 
     def edit_note(self, id, title=None, body=None, adding_tags=None, removing_tags=None, flag_clear_tags=False):
@@ -116,12 +129,14 @@ class Notes(UserDict):
             if flag_clear_tags:
                 note.remove_all_tags()
             self.data[id] = note
+            self.chart.add_point()
         else:
             raise IdError("There is no such note")
 
     def remove_note(self, id):
         if self.data.get(id):
             self.data.pop(id)
+            self.chart.add_point()
         else:
             raise IdError("There is no such note")
 
