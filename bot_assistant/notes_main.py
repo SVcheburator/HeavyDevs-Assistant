@@ -37,7 +37,7 @@ def input_error(func):
 
 def show_commands_note(user_input):
     all_commands = ["add_note", "edit_note", "remove_note", "remove_all_notes", "show_notes", "search_note", "search_by_tags",
-                    "add_tags_to_note", "remove_tags_in_note", "remove_all_tags_in_note", "mark_done", "unmark_done", "exit",
+                    "add_tags_to_note", "remove_tags_in_note", "remove_all_tags_in_note", "mark_done", "unmark_done", "show_chart", "exit",
                     "close"]
     if user_input.strip().lower() == "commands":
         for com in all_commands:
