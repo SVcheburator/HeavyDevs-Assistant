@@ -3,6 +3,7 @@ import pathlib
 from platformdirs import user_data_dir
 from .notes_classes import Tag, Note, Notes, IdError
 from .user_interaction import ConsoleInteraction
+from .activity_chart import Charts, chart_main_func
 
 
 TEXT_COLOR = {
@@ -16,7 +17,10 @@ print = ConsoleInteraction.user_output
 input = ConsoleInteraction.user_input
 
 
-notes = Notes()
+# Chart asignment
+ch = Charts('Notebook chart')
+
+notes = Notes(ch)
 
 
 def input_error(func):
@@ -60,7 +64,7 @@ def add_note(user_input):
         note_tags_list = note_tags.split(", ")
 
     if note_title and note_body:
-        note = Note(note_title, note_body)
+        note = Note(note_title, note_body, ch)
     else:
         return TEXT_COLOR['red'] + "\nYou need to write something in 'title: ... body: ...'\n" + TEXT_COLOR["reset"]
 
@@ -300,18 +304,23 @@ def get_handler(handler):
 def notes_main_func():
     global notes
     notes.load_from_file("save_notebook.bin")
+    ch.load_from_file('save_nb_chart.bin')
     print("\nInput 'commands' to see all the commands avalible!\n", richprint=True)
 
     while True:
-
         notes.save_to_file("save_notebook.bin")
-        user_input = input(">>> ")
+        ch.save_to_file('save_nb_chart.bin')
 
-        if user_input.lower() in ['close', 'exit']:
+        user_input = input(">>> ").lower()
+
+        if user_input == 'show_chart':
+            chart_main_func(ch)
+
+        elif user_input in ['close', 'exit']:
             print("\nGood Bye!\n")
             break
 
-        if user_input:
+        else:
             list_user_input = user_input.split()
             list_user_input[0] = list_user_input[0].lower()
 

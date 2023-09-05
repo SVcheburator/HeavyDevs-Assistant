@@ -4,6 +4,7 @@ from datetime import datetime
 from platformdirs import user_data_dir
 from .address_book_classes import Birthday, Phone, Email, Name, Record, Address, AddressBook, error_keeper
 from .user_interaction import ConsoleInteraction
+from .activity_chart import Charts, chart_main_func
 
 
 TEXT_COLOR = {
@@ -17,7 +18,10 @@ print = ConsoleInteraction.user_output
 input = ConsoleInteraction.user_input
 
 
-ab = AddressBook()
+# Chart asignment
+ch = Charts('Addressbook chart')
+
+ab = AddressBook(ch)
 
 # Iterator
 class ABIterator:
@@ -112,7 +116,7 @@ def add_contact(inp_split_lst):
         except ValueError:
             pass
         
-    ab.add_record(Record(Name(name=input_name), Phone(phone=input_phone), Email(email=input_email), Birthday(birthday=input_birthday), Address(address = input_address), ab=ab))
+    ab.add_record(Record(Name(name=input_name), Phone(phone=input_phone), Email(email=input_email), Birthday(birthday=input_birthday), Address(address = input_address), ab=ab, ch=ch))
 
 # Field operations
 @error_keeper
@@ -222,10 +226,12 @@ def find_func(inp_split_lst):
 # Main function with all input logic
 def address_book_main_func():
     ab.load_from_file('save_addressbook.bin')
+    ch.load_from_file('save_ab_chart.bin')
     print("\nInput 'commands' to see all the commands avalible!\n", richprint=True)
 
     while True:
         ab.save_to_file('save_addressbook.bin')
+        ch.save_to_file('save_ab_chart.bin')
 
         ask = input('>>> ')
         inp_split_lst = ask.split(' ')
@@ -297,6 +303,9 @@ def address_book_main_func():
 
         elif command == 'delete_address':
             delete_field(inp_split_lst, 'address')
+
+        elif command == 'show_chart':
+            chart_main_func(ch)
 
         elif command == 'find':
             find_func(inp_split_lst)
