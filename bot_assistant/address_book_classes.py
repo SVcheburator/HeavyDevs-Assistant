@@ -2,6 +2,7 @@ import pickle
 import re
 from collections import UserDict
 from datetime import datetime
+from .user_interaction import ConsoleInteraction
 
 
 TEXT_COLOR = {
@@ -9,6 +10,10 @@ TEXT_COLOR = {
     "green": "\033[32m",
     "reset": "\033[0m"
 }
+
+# Default print and input replacement
+print = ConsoleInteraction.user_output
+input = ConsoleInteraction.user_input
 
 
 # Custom errors
@@ -167,8 +172,9 @@ class Address(Field):
 
 
 class Record:
-    def __init__(self, person_name, phone_num=None, email=None, birthday=None, address=None, ab=None):
+    def __init__(self, person_name, phone_num=None, email=None, birthday=None, address=None, ab=None, ch=None):
         self.ab = ab
+        self.chart = ch
         self.name = person_name
         
         if phone_num:
@@ -195,6 +201,8 @@ class Record:
             except AttributeError:
                 self.phones = []
                 self.phones.append(extra_phone)
+            
+            self.chart.add_point()
 
             if flag == True and extra_phone.value != None:
                 print(TEXT_COLOR['green'] + f'Phone number {extra_phone.value} has been successfully added!\n' + TEXT_COLOR['reset'])
@@ -211,6 +219,7 @@ class Record:
                         self.phones.remove(ph)
                         print(TEXT_COLOR['green'] + f'Phone number {some_phone.value} has been successfully changed to {different_phone.value}\n' + TEXT_COLOR['reset'])
                         flag = True
+                        self.chart.add_point()
             else:
                 flag = True
         except AttributeError:
@@ -225,6 +234,7 @@ class Record:
                 for ph in self.phones:
                     if ph.value == some_phone.value:
                         self.phones.remove(ph)
+                        self.chart.add_point()
                         flag = True
                         print(TEXT_COLOR['green'] + f'Phone number {some_phone.value} has been successfully deleted\n' + TEXT_COLOR['reset'])
         except AttributeError:
@@ -235,15 +245,17 @@ class Record:
 
     # Email operations
     def add_email(self, extra_email):
-        try:
-            self.emails.append(extra_email)
-            for x in self.emails:
-                x.value
-        except AttributeError:
-            self.emails = []
-            self.emails.append(extra_email)
+        if extra_email.value != None:
+            try:
+                self.emails.append(extra_email)
+                for x in self.emails:
+                    x.value
+            except AttributeError:
+                self.emails = []
+                self.emails.append(extra_email)
 
-        print(TEXT_COLOR['green'] + f'Email {extra_email.value} has been successfully added!\n' + TEXT_COLOR['reset'])
+            self.chart.add_point()
+            print(TEXT_COLOR['green'] + f'Email {extra_email.value} has been successfully added!\n' + TEXT_COLOR['reset'])
 
     def change_email(self, some_email, different_email):
         try:
@@ -253,6 +265,7 @@ class Record:
                     if em.value == some_email.value:
                         self.emails.remove(em)
                         self.emails.append(different_email)
+                        self.chart.add_point()
                         print(TEXT_COLOR['green'] + f'Email {some_email.value} has been successfully changed to {different_email.value}\n' + TEXT_COLOR['reset'])
                         flag = True
             else:
@@ -269,6 +282,7 @@ class Record:
             for em in self.emails:
                 if em.value == some_email.value:
                     self.emails.remove(em)
+                    self.chart.add_point()
                     flag = True
                     print(TEXT_COLOR['green'] + f'Email {some_email.value} has been successfully deleted\n' + TEXT_COLOR['reset'])
         except AttributeError:
@@ -291,6 +305,7 @@ class Record:
     
     def add_birthday(self, extra_birthday):
         self.birthday = extra_birthday
+        self.chart.add_point()
         print(TEXT_COLOR['green'] + f'Birthday {extra_birthday.value.date()} has been successfully added!\n' + TEXT_COLOR['reset'])
 
     def change_birthday(self, some_bd, different_bd):
@@ -298,6 +313,7 @@ class Record:
         try:
             if self.birthday.value == some_bd.value:
                 self.birthday = different_bd
+                self.chart.add_point()
                 print(TEXT_COLOR['green'] + f'Birthday {some_bd.value.date()} has been successfully changed to {different_bd.value.date()}\n' + TEXT_COLOR['reset'])
                 flag = True
         except AttributeError:
@@ -311,6 +327,7 @@ class Record:
         try:
             if self.birthday.value == some_bd.value:
                 self.birthday = None
+                self.chart.add_point()
                 flag = True
                 print(TEXT_COLOR['green'] + f'Birthday {some_bd.value.date()} has been successfully deleted\n' + TEXT_COLOR['reset'])
         except AttributeError:
@@ -322,6 +339,7 @@ class Record:
     #Address operations
     def add_address(self, new_address):
         self.address = new_address
+        self.chart.add_point()
         print(TEXT_COLOR['green'] + f'Address \n{new_address.value} \nhas been successfully added!\n' + TEXT_COLOR['reset'])
 
    
@@ -330,6 +348,7 @@ class Record:
         try:
             if self.address.value == old_adr.value:
                 self.address = new_adr
+                self.chart.add_point()
                 print(TEXT_COLOR['green'] + f'Address \n{old_adr.value} \nhas been successfully changed to \n{new_adr.value}\n' + TEXT_COLOR['reset'])
                 flag = True
         except AttributeError:
@@ -343,6 +362,7 @@ class Record:
         try:
             if self.address.value == some_adr.value:
                 self.address = None
+                self.chart.add_point()
                 flag = True
                 print(TEXT_COLOR['green'] + f'Address \n{some_adr.value} \nhas been successfully deleted\n' + TEXT_COLOR['reset'])
         except AttributeError:
@@ -383,9 +403,14 @@ class Record:
 
 
 class AddressBook(UserDict):
+    def __init__(self, ch) -> None:
+        super().__init__()
+        self.chart = ch
+
     def add_record(self, record):
         try:
             self.data[record.name.value] = record
+            self.chart.add_point()
             print(TEXT_COLOR['green'] + f'One contact ({record.name.value}) has been successfully added!\n' + TEXT_COLOR['reset'])
         except AttributeError:
             print(TEXT_COLOR['red'] + 'The contact has to be named!\n' + TEXT_COLOR['reset'])
@@ -394,10 +419,16 @@ class AddressBook(UserDict):
         for username in self.data.keys():
             if username == name_to_delete:
                 del self.data[username]
+                self.chart.add_point()
                 print(TEXT_COLOR['green'] + f'Contact ({username}) has been deleted successfully!\n' + TEXT_COLOR['reset'])
                 return None
             
         print(TEXT_COLOR['red'] + f'There is no such contact as {name_to_delete}\n' + TEXT_COLOR['reset'])
+    
+    def clear_data(self):
+        self.data.clear()
+        self.chart.add_point()
+        print(TEXT_COLOR['green'] + '\nYour addressbook was cleared successfully!\n' + TEXT_COLOR['reset'])
 
     def find_contact(self, inp):
         def inner_find(inp, rec):

@@ -1,8 +1,9 @@
 import os
 import pathlib
 from platformdirs import user_data_dir
-from rich import print as rprint
 from .notes_classes import Tag, Note, Notes, IdError
+from .user_interaction import ConsoleInteraction
+from .activity_chart import Charts, chart_main_func
 
 
 TEXT_COLOR = {
@@ -11,8 +12,15 @@ TEXT_COLOR = {
     "reset": "\033[0m"
 }
 
+# Default print and input replacement
+print = ConsoleInteraction.user_output
+input = ConsoleInteraction.user_input
 
-notes = Notes()
+
+# Chart asignment
+ch = Charts('Notebook chart')
+
+notes = Notes(ch)
 
 
 def input_error(func):
@@ -29,11 +37,11 @@ def input_error(func):
 
 def show_commands_note(user_input):
     all_commands = ["add_note", "edit_note", "remove_note", "remove_all_notes", "show_notes", "search_note", "search_by_tags",
-                    "add_tags_to_note", "remove_tags_in_note", "remove_all_tags_in_note", "mark_done", "unmark_done", "exit",
+                    "add_tags_to_note", "remove_tags_in_note", "remove_all_tags_in_note", "mark_done", "unmark_done", "show_chart", "exit",
                     "close"]
     if user_input.strip().lower() == "commands":
         for com in all_commands:
-            rprint("-"+"'"+com+"'")
+            print("-"+"'"+com+"'", richprint=True)
         return ''
     else:
         return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"]
@@ -56,7 +64,7 @@ def add_note(user_input):
         note_tags_list = note_tags.split(", ")
 
     if note_title and note_body:
-        note = Note(note_title, note_body)
+        note = Note(note_title, note_body, ch)
     else:
         return TEXT_COLOR['red'] + "\nYou need to write something in 'title: ... body: ...'\n" + TEXT_COLOR["reset"]
 
@@ -196,15 +204,14 @@ def add_tags_to_note(user_input):
 
     if note_tags != [""]:
         for tag in note_tags:
-                if note.add_tags(Tag(tag)) == True:
-                    return TEXT_COLOR['green'] + "\nTags were succesfully added!\n" + TEXT_COLOR["reset"]
-                else:
-                    return TEXT_COLOR['red'] + "\nThis tags already exist!'\n" + TEXT_COLOR["reset"]
+            if note.add_tags(Tag(tag)) == True:
+                result = TEXT_COLOR['green'] + "\nTags were succesfully added!\n" + TEXT_COLOR["reset"]
+            else:
+                result = TEXT_COLOR['red'] + "\nThis tags already exist!'\n" + TEXT_COLOR["reset"]   
+        return result
 
     else:
         return TEXT_COLOR['red'] + "\nTo add tags you need to write 'id: ... tags: ...'\n" + TEXT_COLOR["reset"]
-
-    return TEXT_COLOR['green'] + "\nTags were succesfully added!\n" + TEXT_COLOR["reset"]
 
 
 @input_error
@@ -290,36 +297,30 @@ def get_handler(handler):
     except:
         return TEXT_COLOR['red'] + "\nThis function does not exist. Try again!\n" + TEXT_COLOR["reset"] + "\n" + \
             "To see all functions of notebook, please write " + \
-            TEXT_COLOR['green'] + "'show_commands_note'" + \
+            TEXT_COLOR['green'] + "'commands'" + \
             TEXT_COLOR["reset"] + "\n"
-
-
-def get_file_path(file_name):
-    path = pathlib.Path(user_data_dir("Personal assistant"))
-    if os.name == "nt":
-        path = path.parent
-    if not path.is_dir():
-        path.mkdir()
-    file_path = path.joinpath(file_name)
-    return file_path
 
 
 def notes_main_func():
     global notes
-    file_path = get_file_path("notes.bin")
-    notes.load_from_file(file_path)
-    rprint("\nInput 'commands' to see all the commands avalible!\n")
+    notes.load_from_file("save_notebook.bin")
+    ch.load_from_file('save_nb_chart.bin')
+    print("\nInput 'commands' to see all the commands avalible!\n", richprint=True)
 
     while True:
+        notes.save_to_file("save_notebook.bin")
+        ch.save_to_file('save_nb_chart.bin')
 
-        notes.save_to_file(file_path)
-        user_input = input(">>> ")
+        user_input = input(">>> ").lower()
 
-        if user_input.lower() in ['close', 'exit']:
+        if user_input == 'show_chart':
+            chart_main_func(ch)
+
+        elif user_input in ['close', 'exit']:
             print("\nGood Bye!\n")
             break
 
-        if user_input:
+        else:
             list_user_input = user_input.split()
             list_user_input[0] = list_user_input[0].lower()
 
