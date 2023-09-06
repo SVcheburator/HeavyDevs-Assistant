@@ -44,7 +44,16 @@ class Charts(UserDict):
 
 def update_chart(current_page_data, page_type, ax):
     ax.clear()
-    ax.bar(current_page_data['Days'], current_page_data['Values'])
+    ax.set_facecolor((0.8,0.8,0.8))
+
+    bars = ax.bar(current_page_data['Days'], current_page_data['Values'])
+
+    for bar in bars:
+        bar.set_edgecolor('black')
+        bar.set_facecolor('#EA6D20')
+        bar.set_linewidth(1)
+        bar.set_antialiased(True)
+
     if page_type == 'week':
         ax.set_title('Activity chart (week)')
     elif page_type == 'month':
@@ -64,7 +73,7 @@ def switch_page(event, data_dict, week_data, month_data, ax):
 
 def return_data(ch):
     week_data = {'Days': list(ch.data.keys())[-7:], 'Values': list(ch.data.values())[-7:]}
-    month_data = {'Days': list(ch.data.keys()), 'Values': list(ch.data.values())}
+    month_data = {'Days': list(ch.data.keys())[-30:], 'Values': list(ch.data.values())[-30:]}
     return week_data, month_data
 
 def set_font(ax):
