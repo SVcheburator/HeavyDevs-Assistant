@@ -45,6 +45,7 @@ class Charts(UserDict):
 def update_chart(current_page_data, page_type, ax):
     ax.clear()
     ax.set_facecolor((0.8,0.8,0.8))
+    ax.grid(True, linestyle='--', alpha=0.6, zorder=0)
 
     bars = ax.bar(current_page_data['Days'], current_page_data['Values'])
 
@@ -53,6 +54,7 @@ def update_chart(current_page_data, page_type, ax):
         bar.set_facecolor('#EA6D20')
         bar.set_linewidth(1)
         bar.set_antialiased(True)
+        bar.set_zorder(2)
 
     if page_type == 'week':
         ax.set_title('Activity chart (week)')
@@ -95,7 +97,7 @@ def chart_main_func(ch):
     set_font(ax)
 
     update_chart(current_data['current_data'], current_data['current_page'], ax)
-    
+
 
     button_ax = plt.axes([0.15, 0.89, 0.15, 0.05])
     button = Button(button_ax, 'Change time interval')
