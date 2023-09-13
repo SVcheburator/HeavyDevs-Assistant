@@ -1,7 +1,4 @@
-import os
-import pathlib
 from datetime import datetime
-from platformdirs import user_data_dir
 from .address_book_classes import Birthday, Phone, Email, Name, Record, Address, AddressBook, error_keeper
 from .user_interaction import ConsoleInteraction
 from .activity_chart import Charts, chart_main_func
