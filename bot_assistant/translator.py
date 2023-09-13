@@ -1,10 +1,12 @@
+import pickle
 from googletrans import Translator
+from collections import UserDict
+from datetime import datetime
 from .user_interaction import ConsoleInteraction
 
 # Default print and input replacement
 print = ConsoleInteraction.user_output
 input = ConsoleInteraction.user_input
-
 
 TEXT_COLOR = {
     "red": "\033[31m",
@@ -12,17 +14,7 @@ TEXT_COLOR = {
     "reset": "\033[0m"
 }
 
-
-def translate_text(text, target_language):
-    try:
-        translator = Translator()
-        translated_text = translator.translate(text, dest=target_language)
-        return translated_text.text
-    except Exception as e:
-        return TEXT_COLOR['red'] + str(e) + TEXT_COLOR['reset']
-
-
-langs_availible = ["'af': Afrikaans","'sq': Albanian","'am': Amharic","'ar': Arabic","'hy': Armenian","'az': Azerbaijani",
+LANGS_AVAILIBLE = ["'af': Afrikaans","'sq': Albanian","'am': Amharic","'ar': Arabic","'hy': Armenian","'az': Azerbaijani",
 "'eu': Basque","'be': Belarusian","'bn': Bengali","'bs': Bosnian","'bg': Bulgarian","'ca': Catalan",
 "'ceb': Cebuano","'ny': Chichewa","'zh-cn': Chinese (Simplified)","'zh-tw': Chinese (Traditional)","'co': Corsican",
 "'hr': Croatian","'cs': Czech","'da': Danish","'nl': Dutch","'en': English","'eo': Esperanto","'et': Estonian",
@@ -41,24 +33,73 @@ langs_availible = ["'af': Afrikaans","'sq': Albanian","'am': Amharic","'ar': Ara
 "'te': Telugu","'th': Thai","'tr': Turkish","'uk': Ukrainian","'ur': Urdu","'ug': Uyghur",
 "'uz': Uzbek","'vi': Vietnamese","'cy': Welsh","'xh': Xhosa","'yi': Yiddish","'yo': Yoruba","'zu': Zulu"]
 
+class TranslationSaves(UserDict):
+    def __init__(self, ch) -> None:
+        super().__init__()
+        self.chart = ch
+
+    def save_translation(self, tr_data_tpl):
+        now = datetime.now()
+        time_key = str(now.strftime("%Y-%m-%d (%H:%M:%S)"))
+        self.data[time_key] = tr_data_tpl
+        
+    # Autosave functions
+    def load_from_file(self, file):
+        try:
+            with open(file, "rb") as fh:
+                self.data = pickle.load(fh)
+        except:
+            return "The file with saved addressbook not found, corrupted or empty."
+
+    def save_to_file(self, file):
+        with open(file, "wb") as fh:
+            pickle.dump(self.data, fh)
+    
+    def __str__(self):
+        history = '\n'
+        for k, v in self.data.items():
+            history += f'{k}:\n{v[0]}\n ↓↓↓\n{v[1]}\n\n'
+
+        return history[:-1]
+
+tr_s = TranslationSaves('zaglushka')
+
+# Functions
 def show_languages():
-    for l in langs_availible:
+    for l in LANGS_AVAILIBLE:
         print(l, richprint=True)
 
-def translate_func(inp_split_lst):
-    target_language_brackets = inp_split_lst[1]
-    target_language = target_language_brackets.lstrip('(').rstrip(')')
-    text = ' '.join(inp_split_lst[2:])
-    print(translate_text(str(text), target_language))
+def translate_text(text, target_language):
+    try:
+        translator = Translator()
+        translated_text = translator.translate(text, dest=target_language)
+        tr_s.save_translation((text, translated_text.text))
+        return translated_text.text
+    except Exception as e:
+        return TEXT_COLOR['red'] + str(e) + TEXT_COLOR['reset']
 
+def translate_func(inp_split_lst):
+    try:
+        target_language_brackets = inp_split_lst[1]
+        target_language = target_language_brackets.lstrip('(').rstrip(')')
+        text = ' '.join(inp_split_lst[2:])
+        if len(text) > 0:
+            print('\n' + translate_text(str(text), target_language) + '\n')
+        else:
+            raise IndexError
+    except IndexError:
+        print(TEXT_COLOR['red'] + "Incorrect input!\nInput should be 'translate_to (*lang*) *your_text*'!" + TEXT_COLOR['reset'])
 
 def translator_main_func():
+    tr_s.load_from_file('save_translations.bin')
     print("\nInput 'commands' to see all the commands avalible!\n", richprint=True)
 
     while True:
+        tr_s.save_to_file('save_translations.bin')
+
         ask = input('>>> ')
         inp_split_lst = ask.split(' ')
-        commands = ['translate_to', 'show_languages', 'close', 'exit']
+        commands = ['translate_to (*lang*) *your_text*', 'show_languages', 'show_history', 'close', 'exit']
         command = inp_split_lst[0].lower()
 
         if command == 'translate_to':
@@ -74,6 +115,12 @@ def translator_main_func():
             print('\nLanguages avalible:\n')
             show_languages()
             print('\n')
+        
+        elif command == 'show_history':
+            if len(tr_s) > 0:
+                print(tr_s)
+            else:
+                print('\nYour translations history is empty now!\n')
 
         elif command in commands[-2:]:
             print('\nGood bye!')
