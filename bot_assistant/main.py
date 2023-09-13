@@ -1,6 +1,7 @@
 from .address_book_main import address_book_main_func
 from .notes_main import notes_main_func
 from .sort_main import sort_main_func
+from .translator import translator_main_func
 from .user_interaction import ConsoleInteraction
 import sys
 
@@ -30,7 +31,7 @@ def main_func():
     print("\nHi, I'm your personal helper!")
 
     while True:
-        print("\nYou can run: \n-'addressbook'\n-'notebook'", richprint=True)
+        print("\nYou can run: \n-'addressbook'\n-'notebook'\n-'translator'", richprint=True)
         if docker_mode == False:
             print("-'sorting_files *path*'", richprint=True)
         print("\nOr close your personal helper by 'close' or 'exit'", richprint=True)
@@ -44,6 +45,9 @@ def main_func():
         
         elif choose_program_inp == 'notebook':
             notes_main_func()
+        
+        elif choose_program_inp == 'translator':
+            translator_main_func()
 
         elif input_split_list[0] == 'sorting_files' and docker_mode == False:
             try:
