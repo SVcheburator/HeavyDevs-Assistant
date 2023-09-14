@@ -3,6 +3,7 @@ from googletrans import Translator
 from collections import UserDict
 from datetime import datetime
 from .user_interaction import ConsoleInteraction
+from .activity_chart import Charts, chart_main_func
 
 # Default print and input replacement
 print = ConsoleInteraction.user_output
@@ -62,7 +63,10 @@ class TranslationSaves(UserDict):
 
         return history[:-1]
 
-tr_s = TranslationSaves('zaglushka')
+
+ch = Charts('Addressbook chart')
+
+tr_s = TranslationSaves(ch)
 
 # Functions
 def show_languages():
@@ -74,6 +78,7 @@ def translate_text(text, target_language):
         translator = Translator()
         translated_text = translator.translate(text, dest=target_language)
         tr_s.save_translation((text, translated_text.text))
+        tr_s.chart.add_point()
         return translated_text.text
     except Exception as e:
         return TEXT_COLOR['red'] + str(e) + TEXT_COLOR['reset']
@@ -99,7 +104,7 @@ def translator_main_func():
 
         ask = input('>>> ')
         inp_split_lst = ask.split(' ')
-        commands = ['translate_to (*lang*) *your_text*', 'show_languages', 'show_history', 'close', 'exit']
+        commands = ['translate_to (*lang*) *your_text*', 'show_languages', 'show_history', 'show_chart', 'close', 'exit']
         command = inp_split_lst[0].lower()
 
         if command == 'translate_to':
@@ -121,6 +126,9 @@ def translator_main_func():
                 print(tr_s)
             else:
                 print('\nYour translations history is empty now!\n')
+        
+        elif command == 'show_chart':
+            chart_main_func(ch)
 
         elif command in commands[-2:]:
             print('\nGood bye!')
