@@ -44,9 +44,9 @@ def error_keeper(function):
         except EmailError:
             print(TEXT_COLOR['red'] + 'That is incorrect email!' + TEXT_COLOR['reset'])
         except ValueError:
-            print(TEXT_COLOR['red'] + 'Something is wrong!\nGo to README.md to check the correctness\n' + TEXT_COLOR['reset'])
+            print(TEXT_COLOR['red'] + "Something is wrong!\nCheck the right commands using 'commands'\n" + TEXT_COLOR['reset'])
         except AttributeError:
-            print(TEXT_COLOR['red'] + 'Something is wrong!\nGo to README.md to check the correctness\n' + TEXT_COLOR['reset'])
+            print(TEXT_COLOR['red'] + "Something is wrong!\nCheck the right commands using 'commands'\n" + TEXT_COLOR['reset'])
         except KeyError:
             print(TEXT_COLOR['red'] + 'Name is incorrect!\n' + TEXT_COLOR['reset'])
 

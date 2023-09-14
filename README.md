@@ -1,10 +1,11 @@
 # CLI helper from HeavyDevs
 
-Personal helper with 3 subroutines:
+Personal helper with 4 subroutines:
 
  1. addressbook
  2. notebook
- 3. files sorter
+ 3. translator
+ 4. files sorter
 
 ## Getting Started
 

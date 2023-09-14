@@ -236,13 +236,12 @@ def address_book_main_func():
         command = inp_split_lst[0].lower()
         
         if command == 'hello':
-            print("How can I help you?\nInput 'commands' to see all the commands avalible!\nFor more information go to README.md\n")
+            print("How can I help you?\nInput 'commands' to see all the commands avalible!\n")
 
         elif command == 'commands':
             print('\nCommands avalible:\n')
             for com in commands:
                 print("-"+"'"+com+"'", richprint=True)
-            print('For more information go to README.md\n', richprint=True)
 
         elif command == 'add_contact':
             add_contact(inp_split_lst)
@@ -321,4 +320,4 @@ def address_book_main_func():
             break
 
         else:
-            print(TEXT_COLOR['red'] + f"\nUnknown command ({command})\nInput 'commands' to see all the commands avalible!\nFor more information go to README.md\n" + TEXT_COLOR['reset'])
+            print(TEXT_COLOR['red'] + f"\nUnknown command ({command})\nInput 'commands' to see all the commands avalible!\n" + TEXT_COLOR['reset'])
